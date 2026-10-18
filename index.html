@@ -711,10 +711,19 @@
 					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Descripción</label>
 					<textarea id="class-desc" rows="3" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Detalles de la oferta o producto..."></textarea>
 				</div>
+				
+				<!-- NUEVO: CAMPO PARA SUBIR IMAGEN DESDE EL ESCRITORIO -->
 				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Imagen (URL Opcional)</label>
+					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Subir Imagen desde el Escritorio</label>
+					<input type="file" id="class-file" accept="image/*" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-400">
+				</div>
+
+				<!-- CAMPO OPCIONAL DE URL -->
+				<div>
+					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">O URL de Imagen (Opcional)</label>
 					<input type="url" id="class-img" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="https://...">
 				</div>
+
 				<button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition cursor-pointer">Guardar Clasificado</button>
 			</form>
 		</div>
@@ -1156,15 +1165,22 @@
 		// ================= MODALES Y CRUD ANUNCIOS & CLASIFICADOS =================
 		function openClassifiedModal(id = null) {
 			document.getElementById('classified-modal').classList.remove('hidden');
+			
+			// Limpiar el selector de archivo local al abrir el modal
+			const fileInput = document.getElementById('class-file');
+			if (fileInput) fileInput.value = "";
+
 			if (id) {
-				const item = state.classifieds.find(c => c.firebaseId === id);
-				document.getElementById('classified-modal-title').innerText = "Editar Anuncio";
-				document.getElementById('class-edit-id').value = id;
-				document.getElementById('class-title').value = item.title;
-				document.getElementById('class-type').value = item.type || 'Gratis / Comunidad';
-				document.getElementById('class-contact').value = item.contact;
-				document.getElementById('class-desc').value = item.description;
-				document.getElementById('class-img').value = item.img || '';
+				const item = state.classifieds.find(c => String(c.firebaseId) === String(id));
+				if (item) {
+					document.getElementById('classified-modal-title').innerText = "Editar Anuncio";
+					document.getElementById('class-edit-id').value = id;
+					document.getElementById('class-title').value = item.title || '';
+					document.getElementById('class-type').value = item.type || 'Gratis / Comunidad';
+					document.getElementById('class-contact').value = item.contact || '';
+					document.getElementById('class-desc').value = item.description || '';
+					document.getElementById('class-img').value = item.img || '';
+				}
 			} else {
 				document.getElementById('classified-modal-title').innerText = "Nuevo Anuncio";
 				document.getElementById('class-edit-id').value = "";
@@ -1183,23 +1199,39 @@
 		async function saveClassifiedSubmit(e) {
 			e.preventDefault();
 			const editId = document.getElementById('class-edit-id').value;
+			const fileInput = document.getElementById('class-file');
+			let imageUrl = document.getElementById('class-img').value;
+
+			// Convertir a Base64 si el usuario seleccionó un archivo local
+			if (fileInput.files && fileInput.files[0]) {
+				imageUrl = await convertFileToBase64(fileInput.files[0]);
+			}
+
 			const data = {
 				title: document.getElementById('class-title').value,
 				type: document.getElementById('class-type').value,
 				contact: document.getElementById('class-contact').value,
 				description: document.getElementById('class-desc').value,
-				img: document.getElementById('class-img').value
+				img: imageUrl
 			};
 
-			const { collection, addDoc, doc, updateDoc } = window.firebaseCollections;
+			if (window.firebaseCollections && window.db) {
+				try {
+					const { collection, addDoc, doc, updateDoc } = window.firebaseCollections;
 
-			if (editId) {
-				await updateDoc(doc(window.db, "classifieds", editId), data);
-				const idx = state.classifieds.findIndex(c => c.firebaseId === editId);
-				state.classifieds[idx] = { firebaseId: editId, ...data };
-			} else {
-				const ref = await addDoc(collection(window.db, "classifieds"), data);
-				state.classifieds.push({ firebaseId: ref.id, ...data });
+					if (editId) {
+						await updateDoc(doc(window.db, "classifieds", editId), data);
+						const idx = state.classifieds.findIndex(c => String(c.firebaseId) === String(editId));
+						if (idx !== -1) {
+							state.classifieds[idx] = { firebaseId: editId, ...data };
+						}
+					} else {
+						const ref = await addDoc(collection(window.db, "classifieds"), data);
+						state.classifieds.push({ firebaseId: ref.id, ...data });
+					}
+				} catch (err) {
+					console.error("Error al guardar en Firebase:", err);
+				}
 			}
 
 			closeClassifiedModal();
