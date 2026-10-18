@@ -119,7 +119,7 @@
                                 <span id="hero-tag-text">Señal Oficial Loja</span>
                             </span>
                             <h1 id="hero-title" class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
-                                Señal que conecta a Ecuador con el mundo
+                                La señal que conecta a Ecuador con el mundo
                             </h1>
                             <p id="hero-subtitle" class="text-slate-300 text-base sm:text-lg max-w-xl">
                                 Transmisión HD 24/7 con la mejor programación y artistas internacionales.
@@ -268,7 +268,7 @@
 							<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-slate-300 text-xs">
 								<div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 space-y-1">
 									<span class="text-brand-500 font-bold block"><i class="fa-solid fa-phone mr-1"></i> Teléfono / Cabina</span>
-									<p class="text-white font-medium text-sm">(593) 0959432912 - (593) 07 2 627247</p>
+									<p class="text-white font-medium text-sm">(593) 0959432912 - (593) 07 2627247</p>
 								</div>
 								<div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 space-y-1">
 									<span class="text-brand-500 font-bold block"><i class="fa-solid fa-envelope mr-1"></i> Correo de Ventas</span>
@@ -621,37 +621,44 @@
 		</div>
 	</div>
 
-    <!-- MODAL DE PROGRAMA (CREAR/EDITAR) -->
-    <div id="program-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-8 space-y-6 shadow-2xl relative">
-            <button onclick="closeProgramModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <h3 id="program-modal-title" class="text-xl font-bold text-white">Añadir Programa</h3>
-            <form onsubmit="saveProgramSubmit(event)" class="space-y-4">
-                <input type="hidden" id="prog-edit-id">
-                <div>
-                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nombre del Programa</label>
-                    <input type="text" id="prog-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Horario (Ej. 08:00 - 12:00)</label>
-                    <input type="text" id="prog-time" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nombre del Locutor</label>
-                    <input type="text" id="prog-host" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Descripción</label>
-                    <textarea id="prog-desc" rows="3" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white"></textarea>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Imagen (URL)</label>
-                    <input type="url" id="prog-img" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
-                </div>
-                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition">Guardar Programa</button>
-            </form>
-        </div>
-    </div>
+	<!-- MODAL DE PROGRAMA (CREAR/EDITAR) -->
+	<div id="program-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+		<div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-8 space-y-6 shadow-2xl relative">
+			<button onclick="closeProgramModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+			<h3 id="program-modal-title" class="text-xl font-bold text-white">Añadir Programa</h3>
+			<form onsubmit="saveProgramSubmit(event)" class="space-y-4">
+				<input type="hidden" id="prog-edit-id">
+				<div>
+					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nombre del Programa</label>
+					<input type="text" id="prog-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
+				</div>
+				<div>
+					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Horario (Ej. 08:00 - 12:00)</label>
+					<input type="text" id="prog-time" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
+				</div>
+				<div>
+					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nombre del Locutor</label>
+					<input type="text" id="prog-host" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
+				</div>
+				<div>
+					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Descripción</label>
+					<textarea id="prog-desc" rows="3" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white"></textarea>
+				</div>
+				
+				<!-- NUEVO: Subir imagen desde escritorio o usar URL -->
+				<div>
+					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Subir Imagen desde el Escritorio</label>
+					<input type="file" id="prog-file" accept="image/*" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-400">
+				</div>
+				<div>
+					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">O URL de Imagen Alternativa</label>
+					<input type="url" id="prog-img" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="https://...">
+				</div>
+
+				<button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition cursor-pointer">Guardar Programa</button>
+			</form>
+		</div>
+	</div>
 
     <!-- MODAL DE GALERÍA (CREAR/EDITAR) -->
     <div id="gallery-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
@@ -999,6 +1006,10 @@
         // ================= GESTIÓN DE MODALES PROGRAMAS Y GALERÍA =================
 		function openProgramModal(id = null) {
 			document.getElementById('program-modal').classList.remove('hidden');
+			// Limpiar campo de archivo al abrir
+			const fileInput = document.getElementById('prog-file');
+			if(fileInput) fileInput.value = "";
+
 			if (id) {
 				const prog = state.programs.find(p => String(p.firebaseId) === String(id));
 				if (prog) {
@@ -1011,7 +1022,7 @@
 					document.getElementById('prog-img').value = prog.img || '';
 				}
 			} else {
-				document.getElementById('program-modal-title').innerText = "Nuevo Programa";
+				document.getElementById('program-modal-title').innerText = "Añadir Programa";
 				document.getElementById('prog-edit-id').value = "";
 				document.getElementById('prog-name').value = "";
 				document.getElementById('prog-time').value = "";
@@ -1025,15 +1036,22 @@
 		async function saveProgramSubmit(e) {
 			e.preventDefault();
 			const editId = document.getElementById('prog-edit-id').value;
+			const fileInput = document.getElementById('prog-file');
+			let imageUrl = document.getElementById('prog-img').value;
+
+			// Si el usuario seleccionó un archivo desde su escritorio, conviértelo a Base64
+			if (fileInput.files && fileInput.files[0]) {
+				imageUrl = await convertFileToBase64(fileInput.files[0]);
+			}
+
 			const data = {
 				name: document.getElementById('prog-name').value,
 				time_slot: document.getElementById('prog-time').value,
 				host_name: document.getElementById('prog-host').value,
 				description: document.getElementById('prog-desc').value,
-				img: document.getElementById('prog-img').value
+				img: imageUrl // Se guarda la imagen local procesada o la URL ingresada
 			};
 
-			// Si Firebase está listo y disponible
 			if (window.firebaseCollections && window.db) {
 				try {
 					const { collection, addDoc, doc, updateDoc } = window.firebaseCollections;
@@ -1050,15 +1068,6 @@
 					}
 				} catch (err) {
 					console.error("Error al guardar en Firebase:", err);
-				}
-			} else {
-				// Modo local fallback (si Firebase no ha conectado aún)
-				if (editId) {
-					await updateDoc(doc(window.db, "programs", editId), data);
-					const idx = state.programs.findIndex(p => String(p.firebaseId) === String(editId));
-					if (idx !== -1) {
-						state.programs[idx] = { firebaseId: editId, ...data };
-					}
 				}
 			}
 
@@ -1786,7 +1795,7 @@
         </div>
 
         <div class="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-            <p>© 2026 Universal FM Loja. Todos los derechos reservados.</p>
+            <p>© 2026 Universal FM 99.3 Loja. Todos los derechos reservados.</p>
             <div class="flex items-center space-x-4">
                 <span class="text-slate-400">Desarrollado con Firebase Cloud Backend</span>
                 <button onclick="openLoginModal()" class="text-brand-400 hover:text-brand-300 font-semibold transition cursor-pointer">Acceso Admin</button>
