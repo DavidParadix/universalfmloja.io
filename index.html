@@ -739,10 +739,19 @@
 					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Biografía / Descripción</label>
 					<textarea id="hof-bio" rows="4" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Reseña o tributo..."></textarea>
 				</div>
+				
+				<!-- CAMPO PARA SUBIR DESDE ESCRITORIO -->
 				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Imagen del Artista (URL)</label>
-					<input type="url" id="hof-img" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="https://...">
+					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Subir Imagen desde el Escritorio</label>
+					<input type="file" id="hof-file" accept="image/*" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-400">
 				</div>
+
+				<!-- CAMPO OPCIONAL PARA URL -->
+				<div>
+					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">O URL de Imagen (Opcional)</label>
+					<input type="url" id="hof-img" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="https://...">
+				</div>
+
 				<button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition cursor-pointer">Guardar en el Salón de la Fama</button>
 			</form>
 		</div>
@@ -1211,14 +1220,21 @@
 		// ================= MODALES Y CRUD SALÓN DE LA FAMA =================
 		function openHallOfFameModal(id = null) {
 			document.getElementById('halloffame-modal').classList.remove('hidden');
+			
+			// Limpiar el selector de archivos al abrir el modal
+			const fileInput = document.getElementById('hof-file');
+			if (fileInput) fileInput.value = "";
+
 			if (id) {
-				const item = state.halloffame.find(h => h.firebaseId === id);
-				document.getElementById('halloffame-modal-title').innerText = "Editar Artista";
-				document.getElementById('hof-edit-id').value = id;
-				document.getElementById('hof-name').value = item.name;
-				document.getElementById('hof-role').value = item.role_title;
-				document.getElementById('hof-bio').value = item.bio;
-				document.getElementById('hof-img').value = item.img;
+				const item = state.halloffame.find(h => String(h.firebaseId) === String(id));
+				if (item) {
+					document.getElementById('halloffame-modal-title').innerText = "Editar Artista";
+					document.getElementById('hof-edit-id').value = id;
+					document.getElementById('hof-name').value = item.name || '';
+					document.getElementById('hof-role').value = item.role_title || '';
+					document.getElementById('hof-bio').value = item.bio || '';
+					document.getElementById('hof-img').value = item.img || '';
+				}
 			} else {
 				document.getElementById('halloffame-modal-title').innerText = "Añadir Leyenda / Artista";
 				document.getElementById('hof-edit-id').value = "";
@@ -1236,28 +1252,44 @@
 		async function saveHallOfFameSubmit(e) {
 			e.preventDefault();
 			const editId = document.getElementById('hof-edit-id').value;
+			const fileInput = document.getElementById('hof-file');
+			let imageUrl = document.getElementById('hof-img').value;
+
+			// Si el usuario selecciona una imagen local desde el escritorio, la convertimos a Base64
+			if (fileInput.files && fileInput.files[0]) {
+				imageUrl = await convertFileToBase64(fileInput.files[0]);
+			}
+
 			const data = {
 				name: document.getElementById('hof-name').value,
 				role_title: document.getElementById('hof-role').value,
 				bio: document.getElementById('hof-bio').value,
-				img: document.getElementById('hof-img').value
+				img: imageUrl
 			};
 
-			const { collection, addDoc, doc, updateDoc } = window.firebaseCollections;
+			if (window.firebaseCollections && window.db) {
+				try {
+					const { collection, addDoc, doc, updateDoc } = window.firebaseCollections;
 
-			if (editId) {
-				await updateDoc(doc(window.db, "halloffame", editId), data);
-				const idx = state.halloffame.findIndex(h => h.firebaseId === editId);
-				state.halloffame[idx] = { firebaseId: editId, ...data };
-			} else {
-				const ref = await addDoc(collection(window.db, "halloffame"), data);
-				state.halloffame.push({ firebaseId: ref.id, ...data });
+					if (editId) {
+						await updateDoc(doc(window.db, "halloffame", editId), data);
+						const idx = state.halloffame.findIndex(h => String(h.firebaseId) === String(editId));
+						if (idx !== -1) {
+							state.halloffame[idx] = { firebaseId: editId, ...data };
+						}
+					} else {
+						const ref = await addDoc(collection(window.db, "halloffame"), data);
+						state.halloffame.push({ firebaseId: ref.id, ...data });
+					}
+				} catch (err) {
+					console.error("Error al guardar en Firebase:", err);
+				}
 			}
 
 			closeHallOfFameModal();
 			renderAdminAll();
 			renderPublicAll();
-			alert("Artista registrado con éxito.");
+			alert("Artista guardado con éxito.");
 		}
 
 		async function deleteHallOfFame(id) {
