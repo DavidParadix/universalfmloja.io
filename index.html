@@ -918,7 +918,7 @@
             }
         }
 
-        function togglePlayer() {
+               function togglePlayer() {
             if (isPlaying) {
                 audioEl.pause();
                 isPlaying = false;
@@ -926,17 +926,33 @@
             } else {
                 const label = document.getElementById('main-player-label');
                 label.innerText = "CONECTANDO...";
+                
+                // Aseguramos que tome la URL actual y cargue antes de reproducir
                 audioEl.src = state.streaming.audioUrl;
+                audioEl.load();
+
                 audioEl.play().then(() => {
                     isPlaying = true;
                     updatePlayerUI(true);
-                }).catch(() => {
-                    isPlaying = false;
-                    updatePlayerUI(false);
-                    alert("No se pudo iniciar el streaming de audio. Verifica tu conexión o la URL de emisión.");
+                }).catch((error) => {
+                    // Ya no mandamos alerta molesta de inmediato; 
+                    // le damos una segunda oportunidad silenciosa por si el stream estaba cargando
+                    console.log("Reintentando conexión de audio...", error);
+                    setTimeout(() => {
+                        audioEl.play().then(() => {
+                            isPlaying = true;
+                            updatePlayerUI(true);
+                        }).catch(() => {
+                            isPlaying = false;
+                            updatePlayerUI(false);
+                            alert("No se pudo iniciar el streaming. Verifica la señal de Zeno.fm.");
+                        });
+                    }, 1000);
                 });
             }
         }
+
+        
 
         function switchView(view) {
             const landing = document.getElementById('view-landing');
