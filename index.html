@@ -34,7 +34,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .glass { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .glass { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
         .card-glass { background: rgba(30, 41, 59, 0.65); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.08); }
         body { background-color: #020617; color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; }
         
@@ -49,77 +49,118 @@
             animation: marquee 25s linear infinite;
         }
         .animate-marquee:hover { animation-play-state: paused; }
+
+        /* Ocultar barra de desplazamiento en menú móvil */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 
 <body class="min-h-screen flex flex-col justify-between selection:bg-brand-500 selection:text-white">
 
-    <!-- NAVBAR -->
-    <header class="fixed top-0 left-0 right-0 z-50 glass">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <div class="flex items-center space-x-3 cursor-pointer group" onclick="switchView('landing')">
-                <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-brand-600 to-rose-400 flex items-center justify-center shadow-lg shadow-brand-500/30 overflow-hidden">
+    <!-- NAVBAR FIJO SUPERIOR CON REPRODUCTOR DESTACADO -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass shadow-2xl">
+        <!-- FILA 1: LOGO Y NAVEGACIÓN -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer group" onclick="navigateToPage('home')">
+                <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-tr from-brand-600 to-rose-400 flex items-center justify-center shadow-lg shadow-brand-500/30 overflow-hidden shrink-0">
                     <img id="dynamic-logo-img" src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=150&auto=format&fit=crop" alt="Logo Universal FM" class="w-full h-full object-cover">
                 </div>
                 <div>
-                    <span class="text-xl font-extrabold tracking-tight text-white uppercase">UNIVERSAL <span class="text-brand-500">FM LOJA</span></span>
-                    <span class="block text-[11px] text-slate-300 font-medium tracking-wide lowercase">www.universalfmloja.com</span>
+                    <span class="text-lg sm:text-xl font-extrabold tracking-tight text-white uppercase leading-none block">UNIVERSAL <span class="text-brand-500">FM LOJA</span></span>
+                    <span class="block text-[10px] sm:text-[11px] text-slate-300 font-medium tracking-wide lowercase">www.universalfmloja.com</span>
                 </div>
             </div>
 
-            <!-- Nav Links de Secciones Configurables -->
-            <nav class="hidden lg:flex items-center space-x-6 text-sm font-semibold" id="public-main-nav">
-                <a href="#tab-home" onclick="switchView('landing')" class="text-brand-500 transition hover:text-rose-400">Inicio</a>
-                <a href="#tab-podcast" onclick="switchView('landing')" class="text-slate-300 transition hover:text-brand-500">Podcast & En Vivo</a>
-                <a href="#tab-programs" onclick="switchView('landing')" class="text-slate-300 transition hover:text-brand-500">Programación</a>
-                <a href="#tab-classifieds" onclick="switchView('landing')" class="text-slate-300 transition hover:text-brand-500">Anuncios</a>
-                <a href="#tab-halloffame" onclick="switchView('landing')" class="text-slate-300 transition hover:text-brand-500">Salón de la Fama</a>
-                <a href="#tab-gallery" onclick="switchView('landing')" class="text-slate-300 transition hover:text-brand-500">Galería</a>
-                <a href="#tab-contact" onclick="switchView('landing')" class="text-slate-300 transition hover:text-brand-500">Contacto</a>
+            <!-- Nav Links Desktop -->
+            <nav class="hidden lg:flex items-center space-x-5 text-sm font-semibold" id="public-main-nav">
+                <button onclick="navigateToPage('home')" id="nav-desktop-home" class="nav-link-desktop text-brand-500 transition hover:text-rose-400 cursor-pointer">Inicio</button>
+                <button onclick="navigateToPage('podcast')" id="nav-desktop-podcast" class="nav-link-desktop text-slate-300 transition hover:text-brand-500 cursor-pointer">Podcast & En Vivo</button>
+                <button onclick="navigateToPage('programs')" id="nav-desktop-programs" class="nav-link-desktop text-slate-300 transition hover:text-brand-500 cursor-pointer">Programación</button>
+                <button onclick="navigateToPage('classifieds')" id="nav-desktop-classifieds" class="nav-link-desktop text-slate-300 transition hover:text-brand-500 cursor-pointer">Anuncios</button>
+                <button onclick="navigateToPage('halloffame')" id="nav-desktop-halloffame" class="nav-link-desktop text-slate-300 transition hover:text-brand-500 cursor-pointer">Salón de la Fama</button>
+                <button onclick="navigateToPage('gallery')" id="nav-desktop-gallery" class="nav-link-desktop text-slate-300 transition hover:text-brand-500 cursor-pointer">Galería</button>
+                <button onclick="navigateToPage('contact')" id="nav-desktop-contact" class="nav-link-desktop text-slate-300 transition hover:text-brand-500 cursor-pointer">Contacto</button>
             </nav>
 
-			<!-- Cambiar ese botón superior por un enlace directo a la sección de video -->
-			<div class="flex items-center space-x-3">
-			    <a href="#tab-podcast" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-3 py-2.5 rounded-xl border border-slate-700 text-xs transition flex items-center space-x-1.5">
-			        <i class="fa-solid fa-video text-brand-500"></i>
-			        <span class="hidden sm:inline">Cabina TV</span>
-			    </a>
-                <button onclick="openLoginModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white p-2.5 rounded-xl border border-slate-700 text-xs transition flex items-center space-x-1.5 cursor-pointer">
+            <!-- Accesos Directos -->
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <button onclick="navigateToPage('podcast')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-2 rounded-xl border border-slate-700 text-xs font-bold transition flex items-center space-x-1.5 cursor-pointer">
+                    <i class="fa-solid fa-video text-brand-500"></i>
+                    <span>Cabina TV</span>
+                </button>
+                <button onclick="openLoginModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white p-2 sm:px-3 sm:py-2 rounded-xl border border-slate-700 text-xs transition flex items-center space-x-1.5 cursor-pointer" title="Panel Admin">
                     <i class="fa-solid fa-gear text-brand-500"></i>
-                    <span class="hidden sm:inline">Panel Admin</span>
+                    <span class="hidden sm:inline">Admin</span>
                 </button>
             </div>
         </div>
 
-        <!-- BANDA EN VIVO DE SALUDOS Y NOTICIAS (MARQUEE) -->
-        <div class="bg-slate-950/80 border-t border-slate-800/80 text-xs py-1.5 overflow-hidden flex items-center">
+        <!-- FILA 2: BANDA EN VIVO DE SALUDOS Y NOTICIAS (MARQUEE) -->
+        <div class="bg-slate-950 border-t border-slate-800 text-xs py-1.5 overflow-hidden flex items-center">
             <span class="bg-brand-600 text-white font-extrabold px-3 py-0.5 rounded-r-lg text-[10px] uppercase tracking-wider z-10 shrink-0 flex items-center gap-1 shadow-md">
                 <i class="fa-solid fa-bullhorn text-[9px] animate-bounce"></i> SALUDOS & AL AIRE
             </span>
             <div class="overflow-hidden w-full relative">
-                <div id="marquee-text" class="animate-marquee font-medium text-slate-300">
+                <div id="marquee-text" class="animate-marquee font-medium text-slate-200">
                     🎙️ ¡Bienvenidos a Universal FM Loja! — Un saludo especial a toda la audiencia en Ecuador y el exterior — Escríbenos a nuestra cabina para enviar tus saludos al aire.
                 </div>
             </div>
         </div>
+
+        <!-- FILA 3: REPRODUCTOR PRINCIPAL NOTABLE Y FÁCIL DE USAR (DEBAJO DE SALUDOS) -->
+        <div class="bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 border-t border-b border-brand-500/40 py-2.5 px-4 shadow-lg">
+            <div class="max-w-4xl mx-auto flex items-center justify-between gap-3">
+                <!-- Info Visual de Señal -->
+                <div class="flex items-center space-x-3 min-w-0">
+                    <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden bg-slate-800 border border-brand-500/50 shrink-0 relative">
+                        <img id="player-thumb" src="https://6ab2e7a949b4a3698ffe5252.imgix.net/sandbox/WhatsApp%20Image%202026-09-28%20at%201.49.41%20PM%20(1).jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="truncate">
+                        <div class="flex items-center gap-1.5">
+                            <span id="player-status-dot" class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                            <span id="player-status-text" class="text-[11px] sm:text-xs font-extrabold uppercase tracking-wider text-amber-400">Listo para escuchar</span>
+                        </div>
+                        <p class="text-white font-bold text-sm sm:text-base truncate">Señal en Vivo • 99.3 FM HD</p>
+                    </div>
+                </div>
+
+                <!-- BOTÓN GRANDE Y CLARO PARA ADULTOS MAYORES -->
+                <button id="main-player-btn" onclick="togglePlayer()" class="bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-black px-5 sm:px-7 py-3 sm:py-3.5 rounded-2xl shadow-lg shadow-emerald-600/30 border-2 border-emerald-400/50 flex items-center space-x-2.5 transition-all cursor-pointer shrink-0">
+                    <i id="main-player-icon" class="fa-solid fa-play text-lg sm:text-xl"></i>
+                    <span id="main-player-label" class="text-xs sm:text-sm uppercase tracking-wide">ESCUCHAR RADIO</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- FILA 4: MENÚ DE PÁGINAS PARA MÓVIL (TÁCTIL Y CLARO) -->
+        <nav class="lg:hidden bg-slate-900/95 border-b border-slate-800 px-3 py-2 flex items-center space-x-2 overflow-x-auto no-scrollbar text-xs font-bold">
+            <button onclick="navigateToPage('home')" id="nav-mobile-home" class="nav-link-mobile bg-brand-600 text-white px-3.5 py-2 rounded-xl shrink-0 transition">Inicio</button>
+            <button onclick="navigateToPage('podcast')" id="nav-mobile-podcast" class="nav-link-mobile bg-slate-800 text-slate-300 px-3.5 py-2 rounded-xl shrink-0 transition">Podcast & En Vivo</button>
+            <button onclick="navigateToPage('programs')" id="nav-mobile-programs" class="nav-link-mobile bg-slate-800 text-slate-300 px-3.5 py-2 rounded-xl shrink-0 transition">Programación</button>
+            <button onclick="navigateToPage('classifieds')" id="nav-mobile-classifieds" class="nav-link-mobile bg-slate-800 text-slate-300 px-3.5 py-2 rounded-xl shrink-0 transition">Anuncios</button>
+            <button onclick="navigateToPage('halloffame')" id="nav-mobile-halloffame" class="nav-link-mobile bg-slate-800 text-slate-300 px-3.5 py-2 rounded-xl shrink-0 transition">Salón de la Fama</button>
+            <button onclick="navigateToPage('gallery')" id="nav-mobile-gallery" class="nav-link-mobile bg-slate-800 text-slate-300 px-3.5 py-2 rounded-xl shrink-0 transition">Galería</button>
+            <button onclick="navigateToPage('contact')" id="nav-mobile-contact" class="nav-link-mobile bg-slate-800 text-slate-300 px-3.5 py-2 rounded-xl shrink-0 transition">Contacto</button>
+        </nav>
     </header>
 
-    <!-- MAIN APP CONTAINER -->
-    <main id="app-container" class="flex-grow pt-32 pb-32">
+    <!-- MAIN APP CONTAINER (AJUSTADO AL ALTO DEL HEADER + REPRODUCTOR) -->
+    <main id="app-container" class="flex-grow pt-56 lg:pt-48 pb-16">
 
-        <!-- ================= VISTA PÚBLICA ================= -->
-        <div id="view-landing" class="space-y-16">
+        <!-- ================= VISTA PÚBLICA DIVIDIDA POR PÁGINAS ================= -->
+        <div id="view-landing">
             
-            <!-- HOME VIEW -->
-            <section id="tab-home" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-                <div id="hero-bg-container" class="relative rounded-3xl overflow-hidden card-glass p-8 md:p-14 border border-slate-800 shadow-2xl bg-cover bg-center transition-all duration-700" style="background-image: linear-gradient(rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.95)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1200&auto=format&fit=crop');">
+            <!-- PÁGINA 1: INICIO (HOME) -->
+            <section id="page-home" class="public-page max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+                <div id="hero-bg-container" class="relative rounded-3xl overflow-hidden card-glass p-7 md:p-14 border border-slate-800 shadow-2xl bg-cover bg-center transition-all duration-700" style="background-image: linear-gradient(rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.95)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1200&auto=format&fit=crop');">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center relative z-10">
                         <div class="space-y-6">
                             <span class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-bold uppercase tracking-wider">
                                 <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
                                 <span id="hero-tag-text">Señal Oficial Loja</span>
                             </span>
-                            <h1 id="hero-title" class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
+                            <h1 id="hero-title" class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
                                 La señal que conecta a Ecuador con el mundo
                             </h1>
                             <p id="hero-subtitle" class="text-slate-300 text-base sm:text-lg max-w-xl">
@@ -127,24 +168,48 @@
                             </p>
                             <div class="flex flex-wrap gap-4 pt-2">
                                 <button onclick="togglePlayer()" class="bg-gradient-to-r from-brand-600 to-rose-500 text-white font-bold px-8 py-4 rounded-2xl shadow-lg flex items-center space-x-3 transition hover:opacity-95 cursor-pointer">
-                                    <i class="fa-solid fa-circle-play text-xl"></i>
-                                    <span>Cabina en Vivo HD</span>
+                                    <i class="fa-solid fa-volume-high text-xl"></i>
+                                    <span>Encender / Pausar Audio</span>
                                 </button>
-                                <a href="#tab-podcast" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold px-6 py-4 rounded-2xl border border-slate-700 transition inline-flex items-center">
+                                <button onclick="navigateToPage('podcast')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold px-6 py-4 rounded-2xl border border-slate-700 transition inline-flex items-center cursor-pointer">
                                     Ver Podcast & En Vivo
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Accesos rápidos visuales a las demás páginas desde Inicio -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+                    <button onclick="navigateToPage('programs')" class="card-glass hover:border-brand-500 p-5 rounded-2xl text-left transition cursor-pointer group">
+                        <i class="fa-solid fa-radio text-2xl text-brand-500 mb-2 group-hover:scale-110 transition"></i>
+                        <h3 class="text-white font-bold text-sm sm:text-base">Programación</h3>
+                        <p class="text-slate-400 text-xs mt-1">Horarios y locutores</p>
+                    </button>
+                    <button onclick="navigateToPage('podcast')" class="card-glass hover:border-brand-500 p-5 rounded-2xl text-left transition cursor-pointer group">
+                        <i class="fa-solid fa-video text-2xl text-brand-500 mb-2 group-hover:scale-110 transition"></i>
+                        <h3 class="text-white font-bold text-sm sm:text-base">Cabina en Vivo</h3>
+                        <p class="text-slate-400 text-xs mt-1">Transmisión de video</p>
+                    </button>
+                    <button onclick="navigateToPage('classifieds')" class="card-glass hover:border-brand-500 p-5 rounded-2xl text-left transition cursor-pointer group">
+                        <i class="fa-solid fa-bullhorn text-2xl text-brand-500 mb-2 group-hover:scale-110 transition"></i>
+                        <h3 class="text-white font-bold text-sm sm:text-base">Anuncios</h3>
+                        <p class="text-slate-400 text-xs mt-1">Clasificados de Loja</p>
+                    </button>
+                    <button onclick="navigateToPage('contact')" class="card-glass hover:border-brand-500 p-5 rounded-2xl text-left transition cursor-pointer group">
+                        <i class="fa-brands fa-whatsapp text-2xl text-emerald-500 mb-2 group-hover:scale-110 transition"></i>
+                        <h3 class="text-white font-bold text-sm sm:text-base">Contacto</h3>
+                        <p class="text-slate-400 text-xs mt-1">Envía tus saludos</p>
+                    </button>
+                </div>
             </section>
 
-            <!-- PODCAST & EN VIVO -->
-            <section id="tab-podcast" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 pt-6">
-                <div class="rounded-3xl overflow-hidden p-8 md:p-14 shadow-2xl relative bg-cover bg-center border border-slate-800" style="background-image: linear-gradient(rgba(2, 6, 23, 0.9), rgba(2, 6, 23, 0.95)), url('https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=1200&auto=format&fit=crop');">
+            <!-- PÁGINA 2: PODCAST & EN VIVO -->
+            <section id="page-podcast" class="public-page hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 pt-4">
+                <div class="rounded-3xl overflow-hidden p-6 md:p-14 shadow-2xl relative bg-cover bg-center border border-slate-800" style="background-image: linear-gradient(rgba(2, 6, 23, 0.9), rgba(2, 6, 23, 0.95)), url('https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=1200&auto=format&fit=crop');">
                     <div class="max-w-4xl mx-auto text-center space-y-6">
                         <span class="bg-brand-600 text-white px-4 py-1.5 rounded-full text-xs font-extrabold tracking-widest uppercase inline-block">🎙️ Transmisión en Vivo</span>
-                        <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">Estudios "Universal FM Loja" en directo</h2>
+                        <h2 class="text-2xl sm:text-5xl font-extrabold text-white tracking-tight">Estudios "Universal FM Loja" en directo</h2>
                         <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black shadow-2xl border border-slate-700">
                             <iframe id="video-stream-iframe" src="https://www.youtube.com/embed/live_stream?channel=UC..." class="absolute inset-0 w-full h-full border-0" allowfullscreen></iframe>
                         </div>
@@ -152,8 +217,8 @@
                 </div>
             </section>
 
-            <!-- PROGRAMACIÓN -->
-            <section id="tab-programs" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 pt-6">
+            <!-- PÁGINA 3: PROGRAMACIÓN -->
+            <section id="page-programs" class="public-page hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 pt-4">
                 <div class="text-center space-y-2">
                     <h2 class="text-3xl font-extrabold text-white">Grilla de Programación</h2>
                     <p class="text-slate-400 text-sm">Conoce a nuestros locutores y los horarios de tus programas favoritos.</p>
@@ -161,19 +226,17 @@
                 <div id="programs-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
             </section>
 
-            <!-- ANUNCIOS Y CLASIFICADOS -->
-            <section id="tab-classifieds" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 pt-6">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h2 class="text-3xl font-extrabold text-white">Anuncios & Clasificados</h2>
-                        <p class="text-slate-400 text-sm">Compra, vende y promociona tus servicios en toda la comunidad.</p>
-                    </div>
+            <!-- PÁGINA 4: ANUNCIOS Y CLASIFICADOS -->
+            <section id="page-classifieds" class="public-page hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 pt-4">
+                <div class="text-center sm:text-left">
+                    <h2 class="text-3xl font-extrabold text-white">Anuncios & Clasificados</h2>
+                    <p class="text-slate-400 text-sm">Compra, vende y promociona tus servicios en toda la comunidad.</p>
                 </div>
                 <div id="classifieds-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
             </section>
 
-            <!-- SALÓN DE LA FAMA -->
-            <section id="tab-halloffame" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 pt-6">
+            <!-- PÁGINA 5: SALÓN DE LA FAMA -->
+            <section id="page-halloffame" class="public-page hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 pt-4">
                 <div class="text-center space-y-2">
                     <h2 class="text-3xl font-extrabold text-white">Salón de la Fama</h2>
                     <p class="text-slate-400 text-sm">Tributo permanente a los compositores, músicos y locutores que hicieron historia.</p>
@@ -181,8 +244,8 @@
                 <div id="halloffame-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
             </section>
 
-            <!-- GALERÍA -->
-            <section id="tab-gallery" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 pt-6">
+            <!-- PÁGINA 6: GALERÍA -->
+            <section id="page-gallery" class="public-page hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 pt-4">
                 <div class="text-center space-y-2">
                     <h2 class="text-3xl font-extrabold text-white">Galería Multimedia</h2>
                     <p class="text-slate-400 text-sm">Fotografías y videos exclusivos de nuestros estudios y eventos.</p>
@@ -190,122 +253,116 @@
                 <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
             </section>
 
-            <!-- CONTACTO CON SELLO Y GOOGLE MAPS -->
-			<section id="tab-contact" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 pt-6">
-				<div class="text-center space-y-2">
-					<span class="bg-brand-600/20 text-brand-400 border border-brand-500/30 px-4 py-1 rounded-full text-xs font-extrabold uppercase tracking-widest inline-block">Estudios Centrales</span>
-					<h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Contacto & Cabina</h2>
-					<p class="text-slate-400 text-sm max-w-xl mx-auto">Comunícate directamente con nuestra estación de radio en Loja, Ecuador.</p>
-				</div>
+            <!-- PÁGINA 7: CONTACTO CON SELLO Y GOOGLE MAPS -->
+            <section id="page-contact" class="public-page hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 pt-4">
+                <div class="text-center space-y-2">
+                    <span class="bg-brand-600/20 text-brand-400 border border-brand-500/30 px-4 py-1 rounded-full text-xs font-extrabold uppercase tracking-widest inline-block">Estudios Centrales</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Contacto & Cabina</h2>
+                    <p class="text-slate-400 text-sm max-w-xl mx-auto">Comunícate directamente con nuestra estación de radio en Loja, Ecuador.</p>
+                </div>
 
-				<!-- TARJETA DESTACADA DEL SELLO EMBLEMÁTICO -->
-				<div class="relative rounded-3xl overflow-hidden card-glass p-8 md:p-10 border border-slate-800 shadow-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 flex flex-col md:flex-row items-center justify-between gap-8">
-					<div class="space-y-4 max-w-xl text-center md:text-left z-10">
-						<span class="text-brand-500 font-bold text-xs uppercase tracking-widest block">📻 Transmitiendo en Vivo</span>
-						<h3 class="text-2xl sm:text-3xl font-black text-white">Universal FM Loja</h3>
-						<span class="block text-[11px] text-slate-300 font-medium tracking-wide lowercase">www.universalfmloja.com</span>
-						<p class="text-slate-300 text-sm leading-relaxed">
-							"Radio Internacional de las Grandes Estrellas". Llevando la mejor música, información y entretenimiento a todo el Ecuador y el mundo.
-						</p>
-						<div class="pt-2 flex flex-col space-y-3">
-							<!-- Botones principales de acción -->
-							<div class="flex flex-wrap gap-3 justify-center md:justify-start">
-								<a href="https://wa.me/593959432912?text=Hola%20Universal%20FM,%20quiero%20enviar%20un%20saludo" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl text-xs transition flex items-center gap-2 shadow-lg shadow-emerald-600/20">
-									<i class="fa-brands fa-whatsapp text-base"></i> WhatsApp Cabina
-								</a>
-								<a href="tel:593072627247" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-3 rounded-xl text-xs border border-slate-700 transition flex items-center gap-2">
-									<i class="fa-solid fa-phone text-brand-500"></i> Llamar a Estudios
-								</a>
-							</div>
+                <!-- TARJETA DESTACADA DEL SELLO EMBLEMÁTICO -->
+                <div class="relative rounded-3xl overflow-hidden card-glass p-8 md:p-10 border border-slate-800 shadow-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div class="space-y-4 max-w-xl text-center md:text-left z-10">
+                        <span class="text-brand-500 font-bold text-xs uppercase tracking-widest block">📻 Transmitiendo en Vivo</span>
+                        <h3 class="text-2xl sm:text-3xl font-black text-white">Universal FM Loja</h3>
+                        <span class="block text-[11px] text-slate-300 font-medium tracking-wide lowercase">www.universalfmloja.com</span>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            "Radio Internacional de las Grandes Estrellas". Llevando la mejor música, información y entretenimiento a todo el Ecuador y el mundo.
+                        </p>
+                        <div class="pt-2 flex flex-col space-y-3">
+                            <div class="flex flex-wrap gap-3 justify-center md:justify-start">
+                                <a href="https://wa.me/593959432912?text=Hola%20Universal%20FM,%20quiero%20enviar%20un%20saludo" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl text-xs transition flex items-center gap-2 shadow-lg shadow-emerald-600/20">
+                                    <i class="fa-brands fa-whatsapp text-base"></i> WhatsApp Cabina
+                                </a>
+                                <a href="tel:593072627247" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-3 rounded-xl text-xs border border-slate-700 transition flex items-center gap-2">
+                                    <i class="fa-solid fa-phone text-brand-500"></i> Llamar a Estudios
+                                </a>
+                            </div>
 
-							<!-- Redes Sociales -->
-							<div class="flex space-x-3 pt-1 justify-center md:justify-start">
-								<a href="https://www.facebook.com/profile.php?id=61556124441797&locale=es_LA" target="_blank" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-brand-600 hover:text-white flex items-center justify-center transition border border-slate-800 text-slate-300"><i class="fa-brands fa-facebook-f text-xs"></i></a>
-								<a href="https://www.instagram.com/universalfmloja/?hl=es-la" target="_blank" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-brand-600 hover:text-white flex items-center justify-center transition border border-slate-800 text-slate-300"><i class="fa-brands fa-instagram text-xs"></i></a>
-								<a href="#" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-brand-600 hover:text-white flex items-center justify-center transition border border-slate-800 text-slate-300"><i class="fa-brands fa-youtube text-xs"></i></a>
-								<a href="https://wa.me/593959432912" target="_blank" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition border border-slate-800 text-slate-300"><i class="fa-brands fa-whatsapp text-xs"></i></a>
-							</div>
-						</div>
-					</div>
+                            <div class="flex space-x-3 pt-1 justify-center md:justify-start">
+                                <a href="https://www.facebook.com/profile.php?id=61556124441797&locale=es_LA" target="_blank" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-brand-600 hover:text-white flex items-center justify-center transition border border-slate-800 text-slate-300"><i class="fa-brands fa-facebook-f text-xs"></i></a>
+                                <a href="https://www.instagram.com/universalfmloja/?hl=es-la" target="_blank" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-brand-600 hover:text-white flex items-center justify-center transition border border-slate-800 text-slate-300"><i class="fa-brands fa-instagram text-xs"></i></a>
+                                <a href="#" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-brand-600 hover:text-white flex items-center justify-center transition border border-slate-800 text-slate-300"><i class="fa-brands fa-youtube text-xs"></i></a>
+                                <a href="https://wa.me/593959432912" target="_blank" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition border border-slate-800 text-slate-300"><i class="fa-brands fa-whatsapp text-xs"></i></a>
+                            </div>
+                        </div>
+                    </div>
 
-					<!-- SELLO / LOGO 3D EN CORRESPONDIENTE CONTENEDOR CON GLOW -->
-					<div class="relative group shrink-0 z-10">
-						<div class="absolute -inset-1 bg-gradient-to-r from-brand-600 to-rose-500 rounded-full blur-xl opacity-40 group-hover:opacity-75 transition duration-500"></div>
-						<div class="relative w-56 h-56 md:w-64 md:h-64 rounded-full overflow-hidden border-2 border-slate-700/80 shadow-2xl bg-black flex items-center justify-center p-2">
-							<img src="https://6ab2e7a949b4a3698ffe5252.imgix.net/sandbox/WhatsApp%20Image%202026-09-28%20at%201.49.41%20PM%20(1).jpeg" id="contact-seal-img" alt="Sello Universal FM Loja" class="w-full h-full object-contain rounded-full transform group-hover:scale-105 transition duration-500">
-						</div>
-					</div>
-				</div>
+                    <div class="relative group shrink-0 z-10">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-brand-600 to-rose-500 rounded-full blur-xl opacity-40 group-hover:opacity-75 transition duration-500"></div>
+                        <div class="relative w-56 h-56 md:w-64 md:h-64 rounded-full overflow-hidden border-2 border-slate-700/80 shadow-2xl bg-black flex items-center justify-center p-2">
+                            <img src="https://6ab2e7a949b4a3698ffe5252.imgix.net/sandbox/WhatsApp%20Image%202026-09-28%20at%201.49.41%20PM%20(1).jpeg" id="contact-seal-img" alt="Sello Universal FM Loja" class="w-full h-full object-contain rounded-full transform group-hover:scale-105 transition duration-500">
+                        </div>
+                    </div>
+                </div>
 
-				<!-- FORMULARIO, DATOS Y MAPA -->
-				<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-					<!-- FORMULARIO DE MENSAJES -->
-					<div class="card-glass p-8 rounded-3xl space-y-6 border border-slate-800 shadow-2xl flex flex-col justify-between">
-						<div>
-							<h3 class="text-xl font-bold text-white mb-2">Escríbenos un Correo</h3>
-							<p class="text-slate-400 text-xs mb-6">Déjanos tu mensaje para pautas publicitarias o sugerencias.</p>
-							<form onsubmit="handleContactSubmit(event)" class="space-y-4">
-								<div>
-									<label class="block text-xs font-bold text-slate-400 mb-1">Tu Nombre</label>
-									<input type="text" id="c-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-brand-500 outline-none transition" placeholder="Ej. Juan Pérez">
-								</div>
-								<div>
-									<label class="block text-xs font-bold text-slate-400 mb-1">Tu Correo Electrónico</label>
-									<input type="email" id="c-email" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-brand-500 outline-none transition" placeholder="correo@ejemplo.com">
-								</div>
-								<div>
-									<label class="block text-xs font-bold text-slate-400 mb-1">Mensaje</label>
-									<textarea id="c-msg" rows="4" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-brand-500 outline-none transition resize-none" placeholder="¿En qué podemos ayudarte?"></textarea>
-								</div>
-								<button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3.5 rounded-xl text-sm transition cursor-pointer shadow-lg shadow-brand-600/30">Enviar Mensaje a Ventas</button>
-							</form>
-						</div>
-					</div>
+                <!-- FORMULARIO, DATOS Y MAPA -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="card-glass p-8 rounded-3xl space-y-6 border border-slate-800 shadow-2xl flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">Escríbenos un Correo</h3>
+                            <p class="text-slate-400 text-xs mb-6">Déjanos tu mensaje para pautas publicitarias o sugerencias.</p>
+                            <form onsubmit="handleContactSubmit(event)" class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-400 mb-1">Tu Nombre</label>
+                                    <input type="text" id="c-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-brand-500 outline-none transition" placeholder="Ej. Juan Pérez">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-400 mb-1">Tu Correo Electrónico</label>
+                                    <input type="email" id="c-email" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-brand-500 outline-none transition" placeholder="correo@ejemplo.com">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-400 mb-1">Mensaje</label>
+                                    <textarea id="c-msg" rows="4" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-brand-500 outline-none transition resize-none" placeholder="¿En qué podemos ayudarte?"></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3.5 rounded-xl text-sm transition cursor-pointer shadow-lg shadow-brand-600/30">Enviar Mensaje a Ventas</button>
+                            </form>
+                        </div>
+                    </div>
 
-					<!-- INFORMACIÓN DE CABINA Y GOOGLE MAPS -->
-					<div class="card-glass p-8 rounded-3xl space-y-6 border border-slate-800 shadow-2xl flex flex-col justify-between">
-						<div class="space-y-6">
-							<h3 class="text-xl font-bold text-white border-b border-slate-800 pb-3">Información de Cabina</h3>
-							<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-slate-300 text-xs">
-								<div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 space-y-1">
-									<span class="text-brand-500 font-bold block"><i class="fa-solid fa-phone mr-1"></i> Teléfono / Cabina</span>
-									<p class="text-white font-medium text-sm">(593) 0959432912 - (593) 07 2627247</p>
-								</div>
-								<div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 space-y-1">
-									<span class="text-brand-500 font-bold block"><i class="fa-solid fa-envelope mr-1"></i> Correo de Ventas</span>
-									<p class="text-white font-medium text-sm truncate">ventas@universalfmloja.com</p>
-								</div>
-							</div>
+                    <div class="card-glass p-8 rounded-3xl space-y-6 border border-slate-800 shadow-2xl flex flex-col justify-between">
+                        <div class="space-y-6">
+                            <h3 class="text-xl font-bold text-white border-b border-slate-800 pb-3">Información de Cabina</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-slate-300 text-xs">
+                                <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 space-y-1">
+                                    <span class="text-brand-500 font-bold block"><i class="fa-solid fa-phone mr-1"></i> Teléfono / Cabina</span>
+                                    <p class="text-white font-medium text-sm">(593) 0959432912 - (593) 07 2627247</p>
+                                </div>
+                                <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 space-y-1">
+                                    <span class="text-brand-500 font-bold block"><i class="fa-solid fa-envelope mr-1"></i> Correo de Ventas</span>
+                                    <p class="text-white font-medium text-sm truncate">ventas@universalfmloja.com</p>
+                                </div>
+                            </div>
 
-							<div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 space-y-1">
-								<span class="text-brand-500 font-bold text-xs block"><i class="fa-solid fa-location-dot mr-1"></i> Dirección Física</span>
-								<p class="text-white font-medium text-sm">Calle Leopoldo Palacios 08-91 y Sabiango  (Plaza de San Sebastián)</p>
-								<span class="text-slate-400 text-[11px] block">Loja — Ecuador</span>
-							</div>
+                            <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 space-y-1">
+                                <span class="text-brand-500 font-bold text-xs block"><i class="fa-solid fa-location-dot mr-1"></i> Dirección Física</span>
+                                <p class="text-white font-medium text-sm">Calle Leopoldo Palacios 08-91 y Sabiango  (Plaza de San Sebastián)</p>
+                                <span class="text-slate-400 text-[11px] block">Loja — Ecuador</span>
+                            </div>
 
-							<!-- MAPA DE GOOGLE INTEGRADO ESTILO OSCURO -->
-							<div class="space-y-2">
-								<span class="text-slate-400 text-xs font-bold flex items-center justify-between">
-									<span>Ubicación en Google Maps</span>
-									<a href="https://maps.google.com/?q=Leopoldo+Palacios+y+Sabiango+Loja+Ecuador" target="_blank" class="text-brand-400 hover:underline">Abrir Mapa Grande <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
-								</span>
-								<div class="w-full h-52 rounded-2xl overflow-hidden border border-slate-800 shadow-inner bg-slate-950">
-									<iframe 
-										class="w-full h-full border-0 grayscale contrast-125 opacity-90 hover:grayscale-0 transition duration-500" 
-										src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3980.10825310058!2d-79.20625!3d-4.00015!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91cb383327663f7d%3A0x1039bc0262145e69!2sLeopoldo%20Palacios%20%26%20Sabiango%2C%20Loja!5e0!3m2!1ses!2sec!4v1700000000000!5m2!1ses!2sec" 
-										allowfullscreen="" 
-										loading="lazy" 
-										referrerpolicy="no-referrer-when-downgrade">
-									</iframe>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
+                            <div class="space-y-2">
+                                <span class="text-slate-400 text-xs font-bold flex items-center justify-between">
+                                    <span>Ubicación en Google Maps</span>
+                                    <a href="https://maps.google.com/?q=Leopoldo+Palacios+y+Sabiango+Loja+Ecuador" target="_blank" class="text-brand-400 hover:underline">Abrir Mapa Grande <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
+                                </span>
+                                <div class="w-full h-52 rounded-2xl overflow-hidden border border-slate-800 shadow-inner bg-slate-950">
+                                    <iframe 
+                                        class="w-full h-full border-0 grayscale contrast-125 opacity-90 hover:grayscale-0 transition duration-500" 
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3980.10825310058!2d-79.20625!3d-4.00015!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91cb383327663f7d%3A0x1039bc0262145e69!2sLeopoldo%20Palacios%20%26%20Sabiango%2C%20Loja!5e0!3m2!1ses!2sec!4v1700000000000!5m2!1ses!2sec" 
+                                        allowfullscreen="" 
+                                        loading="lazy" 
+                                        referrerpolicy="no-referrer-when-downgrade">
+                                    </iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
 
-        <!-- ================= BACKOFFICE PANEL ADMIN ================= -->
+        <!-- ================= BACKOFFICE PANEL ADMIN (INTACTO) ================= -->
         <div id="view-backoffice" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 my-8">
             <div class="bg-slate-900 p-6 rounded-3xl border border-slate-800 flex flex-wrap gap-3 items-center justify-between shadow-2xl">
                 <div>
@@ -320,33 +377,33 @@
 
             <!-- Admin Tabs Navigation -->
             <div class="flex flex-wrap gap-2 border-b border-slate-800 pb-4">
-			    <button onclick="switchAdminTab('users')" id="tab-btn-users" class="admin-tab-btn px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900 text-slate-300 transition cursor-pointer">Usuarios Admin</button>
+                <button onclick="switchAdminTab('users')" id="tab-btn-users" class="admin-tab-btn px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900 text-slate-300 transition cursor-pointer">Usuarios Admin</button>
                 <button onclick="switchAdminTab('programs')" id="tab-btn-programs" class="admin-tab-btn px-4 py-2.5 rounded-xl font-bold text-sm bg-brand-600 text-white transition cursor-pointer">Programación</button>
                 <button onclick="switchAdminTab('gallery')" id="tab-btn-gallery" class="admin-tab-btn px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900 text-slate-300 transition cursor-pointer">Galería</button>
                 <button onclick="switchAdminTab('streaming')" id="tab-btn-streaming" class="admin-tab-btn px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900 text-slate-300 transition cursor-pointer">Streaming & Saludos</button>
                 <button onclick="switchAdminTab('logo')" id="tab-btn-logo" class="admin-tab-btn px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900 text-slate-300 transition cursor-pointer">Logotipo</button>
                 <button onclick="switchAdminTab('seo')" id="tab-btn-seo" class="admin-tab-btn px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900 text-slate-300 transition cursor-pointer">SEO Google (Yoast)</button>
                 <button onclick="switchAdminTab('config')" id="tab-btn-config" class="admin-tab-btn px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900 text-slate-300 transition cursor-pointer">Menús & Hero</button>
-				<button onclick="switchAdminTab('whatsapp')" id="tab-btn-whatsapp" class="admin-tab-btn px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900 text-slate-300 transition cursor-pointer">Bot WhatsApp</button>
-				<button onclick="switchAdminTab('classifieds')" id="tab-btn-classifieds" class="admin-tab-btn px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900 text-slate-300 transition cursor-pointer">Anuncios</button>
-				<button onclick="switchAdminTab('halloffame')" id="tab-btn-halloffame" class="admin-tab-btn px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900 text-slate-300 transition cursor-pointer">Salón de la Fama</button>
+                <button onclick="switchAdminTab('whatsapp')" id="tab-btn-whatsapp" class="admin-tab-btn px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900 text-slate-300 transition cursor-pointer">Bot WhatsApp</button>
+                <button onclick="switchAdminTab('classifieds')" id="tab-btn-classifieds" class="admin-tab-btn px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900 text-slate-300 transition cursor-pointer">Anuncios</button>
+                <button onclick="switchAdminTab('halloffame')" id="tab-btn-halloffame" class="admin-tab-btn px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900 text-slate-300 transition cursor-pointer">Salón de la Fama</button>
             </div>
 
             <!-- Admin Contents -->
             <div class="space-y-6">
-			    <!-- TAB USUARIOS ADMIN -->
-				<div id="admin-tab-users" class="admin-tab-content hidden space-y-6">
-					<div class="flex justify-between items-center bg-slate-900 p-6 rounded-2xl border border-slate-800">
-						<div>
-							<h3 class="text-lg font-bold text-white">Gestión de Usuarios</h3>
-							<p class="text-xs text-slate-400">Controla quiénes tienen acceso al panel de administración</p>
-						</div>
-						<button onclick="openUserModal()" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition cursor-pointer flex items-center gap-2">
-							<i class="fa-solid fa-user-plus"></i> Nuevo Usuario
-						</button>
-					</div>
-					<div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="admin-users-list"></div>
-				</div>
+                <!-- TAB USUARIOS ADMIN -->
+                <div id="admin-tab-users" class="admin-tab-content hidden space-y-6">
+                    <div class="flex justify-between items-center bg-slate-900 p-6 rounded-2xl border border-slate-800">
+                        <div>
+                            <h3 class="text-lg font-bold text-white">Gestión de Usuarios</h3>
+                            <p class="text-xs text-slate-400">Controla quiénes tienen acceso al panel de administración</p>
+                        </div>
+                        <button onclick="openUserModal()" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition cursor-pointer flex items-center gap-2">
+                            <i class="fa-solid fa-user-plus"></i> Nuevo Usuario
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="admin-users-list"></div>
+                </div>
                 
                 <!-- TAB PROGRAMS ADMIN -->
                 <div id="admin-tab-programs" class="admin-tab-content space-y-6">
@@ -375,34 +432,34 @@
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6" id="admin-gallery-grid"></div>
                 </div>
-				
-				<!-- TAB ANUNCIOS & CLASIFICADOS ADMIN -->
-				<div id="admin-tab-classifieds" class="admin-tab-content hidden space-y-6">
-					<div class="flex justify-between items-center bg-slate-900 p-6 rounded-2xl border border-slate-800">
-						<div>
-							<h3 class="text-lg font-bold text-white">Anuncios y Clasificados</h3>
-							<p class="text-xs text-slate-400">Gestiona las publicaciones publicitarias y clasificados</p>
-						</div>
-						<button onclick="openClassifiedModal()" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition cursor-pointer flex items-center gap-2">
-							<i class="fa-solid fa-plus"></i> Nuevo Anuncio
-						</button>
-					</div>
-					<div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="admin-classifieds-list"></div>
-				</div>
+                
+                <!-- TAB ANUNCIOS & CLASIFICADOS ADMIN -->
+                <div id="admin-tab-classifieds" class="admin-tab-content hidden space-y-6">
+                    <div class="flex justify-between items-center bg-slate-900 p-6 rounded-2xl border border-slate-800">
+                        <div>
+                            <h3 class="text-lg font-bold text-white">Anuncios y Clasificados</h3>
+                            <p class="text-xs text-slate-400">Gestiona las publicaciones publicitarias y clasificados</p>
+                        </div>
+                        <button onclick="openClassifiedModal()" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition cursor-pointer flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Nuevo Anuncio
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="admin-classifieds-list"></div>
+                </div>
 
-				<!-- TAB SALÓN DE LA FAMA ADMIN -->
-				<div id="admin-tab-halloffame" class="admin-tab-content hidden space-y-6">
-					<div class="flex justify-between items-center bg-slate-900 p-6 rounded-2xl border border-slate-800">
-						<div>
-							<h3 class="text-lg font-bold text-white">Salón de la Fama</h3>
-							<p class="text-xs text-slate-400">Tributo a los artistas, compositores y leyendas de la música</p>
-						</div>
-						<button onclick="openHallOfFameModal()" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition cursor-pointer flex items-center gap-2">
-							<i class="fa-solid fa-plus"></i> Nuevo Artista / Leyenda
-						</button>
-					</div>
-					<div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="admin-halloffame-list"></div>
-				</div>
+                <!-- TAB SALÓN DE LA FAMA ADMIN -->
+                <div id="admin-tab-halloffame" class="admin-tab-content hidden space-y-6">
+                    <div class="flex justify-between items-center bg-slate-900 p-6 rounded-2xl border border-slate-800">
+                        <div>
+                            <h3 class="text-lg font-bold text-white">Salón de la Fama</h3>
+                            <p class="text-xs text-slate-400">Tributo a los artistas, compositores y leyendas de la música</p>
+                        </div>
+                        <button onclick="openHallOfFameModal()" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition cursor-pointer flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Nuevo Artista / Leyenda
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="admin-halloffame-list"></div>
+                </div>
 
                 <!-- TAB STREAMING & SALUDOS ADMIN -->
                 <div id="admin-tab-streaming" class="admin-tab-content hidden space-y-6">
@@ -458,7 +515,6 @@
                             <span class="bg-emerald-500/20 text-emerald-400 text-xs px-3 py-1 rounded-full font-bold">SEO Activo</span>
                         </div>
 
-                        <!-- SIMULADOR SNIPPET YOAST GOOGLE -->
                         <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-2">
                             <span class="text-[11px] uppercase font-extrabold text-slate-500 tracking-wider block">Vista previa del resultado en Google</span>
                             <div class="font-sans">
@@ -544,124 +600,102 @@
                         </form>
                     </div>
                 </div>
-				<!-- TAB WHATSAPP BOT ADMIN -->
-				<div id="admin-tab-whatsapp" class="admin-tab-content hidden space-y-6">
-					<div class="bg-slate-900 p-8 rounded-2xl border border-slate-800 max-w-xl mx-auto space-y-6">
-						<h3 class="text-xl font-bold text-white">Configurar Bot de WhatsApp</h3>
-						<form onsubmit="saveWhatsappConfig(event)" class="space-y-4">
-							<div>
-								<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Número de WhatsApp (con código de país)</label>
-								<input type="text" id="wa-number" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white" placeholder="593991142422">
-							</div>
-							<div>
-								<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Mensaje de Bienvenida del Bot</label>
-								<textarea id="wa-welcome" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white resize-none"></textarea>
-							</div>
-							<div>
-								<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Opciones / Botones (Escribe una opción por cada línea)</label>
-								<textarea id="wa-options" rows="4" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white" placeholder="🎵 Enviar Saludos al Aire&#10;📻 Programación de Hoy&#10;📞 Contactar a Cabina"></textarea>
-							</div>
-							<button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl cursor-pointer transition">Guardar y Actualizar Bot</button>
-						</form>
-					</div>
-				</div>
+
+                <!-- TAB WHATSAPP BOT ADMIN -->
+                <div id="admin-tab-whatsapp" class="admin-tab-content hidden space-y-6">
+                    <div class="bg-slate-900 p-8 rounded-2xl border border-slate-800 max-w-xl mx-auto space-y-6">
+                        <h3 class="text-xl font-bold text-white">Configurar Bot de WhatsApp</h3>
+                        <form onsubmit="saveWhatsappConfig(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Número de WhatsApp (con código de país)</label>
+                                <input type="text" id="wa-number" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white" placeholder="593991142422">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Mensaje de Bienvenida del Bot</label>
+                                <textarea id="wa-welcome" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white resize-none"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Opciones / Botones (Escribe una opción por cada línea)</label>
+                                <textarea id="wa-options" rows="4" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white" placeholder="🎵 Enviar Saludos al Aire&#10;📻 Programación de Hoy&#10;📞 Contactar a Cabina"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl cursor-pointer transition">Guardar y Actualizar Bot</button>
+                        </form>
+                    </div>
+                </div>
 
             </div>
         </div>
     </main>
 
-    <!-- REPRODUCTOR FLOTANTE INFERIOR -->
-    <div class="fixed bottom-0 left-0 right-0 z-40 glass border-t border-slate-800 py-3 px-4 sm:px-8 bg-slate-950/90">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <div class="w-12 h-12 rounded-xl overflow-hidden bg-slate-800">
-                    <img id="player-thumb" src="https://6ab2e7a949b4a3698ffe5252.imgix.net/sandbox/WhatsApp%20Image%202026-09-28%20at%201.49.41%20PM%20(1).jpeg" class="w-full h-full object-cover">
+    <!-- MODALES INTACTOS -->
+    <!-- MODAL DE USUARIO -->
+    <div id="user-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-8 space-y-6 shadow-2xl relative">
+            <button onclick="closeUserModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h3 id="user-modal-title" class="text-xl font-bold text-white">Añadir Usuario Administrador</h3>
+            <form onsubmit="saveUserSubmit(event)" class="space-y-4">
+                <input type="hidden" id="user-edit-id">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nombre o Alias</label>
+                    <input type="text" id="usr-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Ej. Carlos Locutor">
                 </div>
                 <div>
-                    <span class="text-[10px] uppercase font-bold text-brand-400 block flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> En Directo 24/7
-                    </span>
-                    <h4 class="text-sm font-bold text-white">ENCENDER RADIO</h4>
-                    <span class="block text-[11px] text-slate-300 font-medium tracking-wide lowercase">www.universalfmloja.com</span>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nombre de Usuario (Login)</label>
+                    <input type="text" id="usr-username" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="carlos_admin">
                 </div>
-            </div>
-            <button onclick="togglePlayer()" class="w-12 h-12 rounded-2xl bg-brand-600 text-white flex items-center justify-center shadow-lg cursor-pointer hover:bg-brand-500 transition">
-                <i id="main-player-icon" class="fa-solid fa-play"></i>
-            </button>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Contraseña</label>
+                    <input type="text" id="usr-pass" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Contraseña segura">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Rol / Permisos</label>
+                    <select id="usr-role" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
+                        <option value="Administrador General">Administrador General</option>
+                        <option value="Locutor / Editor">Locutor / Editor</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition cursor-pointer">Guardar Usuario</button>
+            </form>
         </div>
     </div>
-	
-	<!-- MODAL DE USUARIO (CREAR/EDITAR) -->
-	<div id="user-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-		<div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-8 space-y-6 shadow-2xl relative">
-			<button onclick="closeUserModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
-			<h3 id="user-modal-title" class="text-xl font-bold text-white">Añadir Usuario Administrador</h3>
-			<form onsubmit="saveUserSubmit(event)" class="space-y-4">
-				<input type="hidden" id="user-edit-id">
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nombre o Alias</label>
-					<input type="text" id="usr-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Ej. Carlos Locutor">
-				</div>
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nombre de Usuario (Login)</label>
-					<input type="text" id="usr-username" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="carlos_admin">
-				</div>
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Contraseña</label>
-					<input type="text" id="usr-pass" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Contraseña segura">
-				</div>
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Rol / Permisos</label>
-					<select id="usr-role" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
-						<option value="Administrador General">Administrador General</option>
-						<option value="Locutor / Editor">Locutor / Editor</option>
-					</select>
-				</div>
-				<button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition cursor-pointer">Guardar Usuario</button>
-			</form>
-		</div>
-	</div>
 
-	<!-- MODAL DE PROGRAMA (CREAR/EDITAR) -->
-	<div id="program-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-		<div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-8 space-y-6 shadow-2xl relative">
-			<button onclick="closeProgramModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
-			<h3 id="program-modal-title" class="text-xl font-bold text-white">Añadir Programa</h3>
-			<form onsubmit="saveProgramSubmit(event)" class="space-y-4">
-				<input type="hidden" id="prog-edit-id">
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nombre del Programa</label>
-					<input type="text" id="prog-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
-				</div>
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Horario (Ej. 08:00 - 12:00)</label>
-					<input type="text" id="prog-time" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
-				</div>
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nombre del Locutor</label>
-					<input type="text" id="prog-host" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
-				</div>
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Descripción</label>
-					<textarea id="prog-desc" rows="3" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white"></textarea>
-				</div>
-				
-				<!-- NUEVO: Subir imagen desde escritorio o usar URL -->
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Subir Imagen desde el Escritorio</label>
-					<input type="file" id="prog-file" accept="image/*" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-400">
-				</div>
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">O URL de Imagen Alternativa</label>
-					<input type="url" id="prog-img" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="https://...">
-				</div>
+    <!-- MODAL DE PROGRAMA -->
+    <div id="program-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-8 space-y-6 shadow-2xl relative">
+            <button onclick="closeProgramModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h3 id="program-modal-title" class="text-xl font-bold text-white">Añadir Programa</h3>
+            <form onsubmit="saveProgramSubmit(event)" class="space-y-4">
+                <input type="hidden" id="prog-edit-id">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nombre del Programa</label>
+                    <input type="text" id="prog-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Horario (Ej. 08:00 - 12:00)</label>
+                    <input type="text" id="prog-time" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nombre del Locutor</label>
+                    <input type="text" id="prog-host" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Descripción</label>
+                    <textarea id="prog-desc" rows="3" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Subir Imagen desde el Escritorio</label>
+                    <input type="file" id="prog-file" accept="image/*" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">O URL de Imagen Alternativa</label>
+                    <input type="url" id="prog-img" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="https://...">
+                </div>
+                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition cursor-pointer">Guardar Programa</button>
+            </form>
+        </div>
+    </div>
 
-				<button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition cursor-pointer">Guardar Programa</button>
-			</form>
-		</div>
-	</div>
-
-    <!-- MODAL DE GALERÍA (CREAR/EDITAR) -->
+    <!-- MODAL DE GALERÍA -->
     <div id="gallery-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-8 space-y-6 shadow-2xl relative">
             <button onclick="closeGalleryModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
@@ -684,88 +718,78 @@
             </form>
         </div>
     </div>
-	
-	<!-- MODAL DE ANUNCIOS & CLASIFICADOS -->
-	<div id="classified-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-		<div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-8 space-y-6 shadow-2xl relative">
-			<button onclick="closeClassifiedModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
-			<h3 id="classified-modal-title" class="text-xl font-bold text-white">Añadir Anuncio / Clasificado</h3>
-			<form onsubmit="saveClassifiedSubmit(event)" class="space-y-4">
-				<input type="hidden" id="class-edit-id">
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Título del Anuncio</label>
-					<input type="text" id="class-title" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Ej. Se vende equipo de perifoneo">
-				</div>
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Tipo de Anuncio</label>
-					<select id="class-type" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
-						<option value="Gratis / Comunidad">Gratis / Comunidad</option>
-						<option value="Destacado / Empresa">Destacado / Empresa</option>
-						<option value="Urgente">Urgente</option>
-					</select>
-				</div>
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Teléfono o WhatsApp de Contacto</label>
-					<input type="text" id="class-contact" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Ej. 0991142422">
-				</div>
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Descripción</label>
-					<textarea id="class-desc" rows="3" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Detalles de la oferta o producto..."></textarea>
-				</div>
-				
-				<!-- NUEVO: CAMPO PARA SUBIR IMAGEN DESDE EL ESCRITORIO -->
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Subir Imagen desde el Escritorio</label>
-					<input type="file" id="class-file" accept="image/*" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-400">
-				</div>
+    
+    <!-- MODAL DE ANUNCIOS & CLASIFICADOS -->
+    <div id="classified-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-8 space-y-6 shadow-2xl relative">
+            <button onclick="closeClassifiedModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h3 id="classified-modal-title" class="text-xl font-bold text-white">Añadir Anuncio / Clasificado</h3>
+            <form onsubmit="saveClassifiedSubmit(event)" class="space-y-4">
+                <input type="hidden" id="class-edit-id">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Título del Anuncio</label>
+                    <input type="text" id="class-title" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Ej. Se vende equipo de perifoneo">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Tipo de Anuncio</label>
+                    <select id="class-type" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white">
+                        <option value="Gratis / Comunidad">Gratis / Comunidad</option>
+                        <option value="Destacado / Empresa">Destacado / Empresa</option>
+                        <option value="Urgente">Urgente</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Teléfono o WhatsApp de Contacto</label>
+                    <input type="text" id="class-contact" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Ej. 0991142422">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Descripción</label>
+                    <textarea id="class-desc" rows="3" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Detalles de la oferta o producto..."></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Subir Imagen desde el Escritorio</label>
+                    <input type="file" id="class-file" accept="image/*" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">O URL de Imagen (Opcional)</label>
+                    <input type="url" id="class-img" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="https://...">
+                </div>
+                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition cursor-pointer">Guardar Clasificado</button>
+            </form>
+        </div>
+    </div>
 
-				<!-- CAMPO OPCIONAL DE URL -->
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">O URL de Imagen (Opcional)</label>
-					<input type="url" id="class-img" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="https://...">
-				</div>
-
-				<button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition cursor-pointer">Guardar Clasificado</button>
-			</form>
-		</div>
-	</div>
-
-	<!-- MODAL DE SALÓN DE LA FAMA -->
-	<div id="halloffame-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-		<div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-8 space-y-6 shadow-2xl relative">
-			<button onclick="closeHallOfFameModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
-			<h3 id="halloffame-modal-title" class="text-xl font-bold text-white">Añadir Leyenda / Artista</h3>
-			<form onsubmit="saveHallOfFameSubmit(event)" class="space-y-4">
-				<input type="hidden" id="hof-edit-id">
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nombre Completo del Artista / Músico</label>
-					<input type="text" id="hof-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Ej. Segundo Cueva Celi">
-				</div>
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Título / Rol</label>
-					<input type="text" id="hof-role" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Ej. Compositor e Insigne Músico Lojano">
-				</div>
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Biografía / Descripción</label>
-					<textarea id="hof-bio" rows="4" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Reseña o tributo..."></textarea>
-				</div>
-				
-				<!-- CAMPO PARA SUBIR DESDE ESCRITORIO -->
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Subir Imagen desde el Escritorio</label>
-					<input type="file" id="hof-file" accept="image/*" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-400">
-				</div>
-
-				<!-- CAMPO OPCIONAL PARA URL -->
-				<div>
-					<label class="block text-xs font-semibold uppercase text-slate-400 mb-1">O URL de Imagen (Opcional)</label>
-					<input type="url" id="hof-img" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="https://...">
-				</div>
-
-				<button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition cursor-pointer">Guardar en el Salón de la Fama</button>
-			</form>
-		</div>
-	</div>
+    <!-- MODAL DE SALÓN DE LA FAMA -->
+    <div id="halloffame-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-8 space-y-6 shadow-2xl relative">
+            <button onclick="closeHallOfFameModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h3 id="halloffame-modal-title" class="text-xl font-bold text-white">Añadir Leyenda / Artista</h3>
+            <form onsubmit="saveHallOfFameSubmit(event)" class="space-y-4">
+                <input type="hidden" id="hof-edit-id">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nombre Completo del Artista / Músico</label>
+                    <input type="text" id="hof-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Ej. Segundo Cueva Celi">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Título / Rol</label>
+                    <input type="text" id="hof-role" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Ej. Compositor e Insigne Músico Lojano">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Biografía / Descripción</label>
+                    <textarea id="hof-bio" rows="4" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="Reseña o tributo..."></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Subir Imagen desde el Escritorio</label>
+                    <input type="file" id="hof-file" accept="image/*" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">O URL de Imagen (Opcional)</label>
+                    <input type="url" id="hof-img" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" placeholder="https://...">
+                </div>
+                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition cursor-pointer">Guardar en el Salón de la Fama</button>
+            </form>
+        </div>
+    </div>
 
     <!-- MODAL LOGIN -->
     <div id="login-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
@@ -794,7 +818,7 @@
 
     <!-- AUDIO STREAMING ELEMENT -->
     <audio id="radio-audio" src="https://stream.zeno.fm/f3wvbb757fhvv" preload="auto" crossorigin="anonymous"></audio>
-	
+    
     <!-- SCRIPT DE LÓGICA Y FIREBASE -->
     <script>
         let state = {
@@ -818,7 +842,7 @@
             streaming: {
                 audioUrl: "https://stream.zeno.fm/f3wvbb757fhvv",
                 videoUrl: "https://www.youtube.com/embed/live_stream?channel=UC...",
-                marqueeText: "🎙️ ¡Bienvenidos a Universal FM Loja! — Un saludo especial a toda la audiencia en Ecuador y el exterior — Escríbenos a nossa cabina para enviar tus saludos al aire."
+                marqueeText: "🎙️ ¡Bienvenidos a Universal FM Loja! — Un saludo especial a toda la audiencia en Ecuador y el exterior — Escríbenos a nuestra cabina para enviar tus saludos al aire."
             },
             heroTitle: "La Señal que Conecta a Loja con el mundo",
             heroSubtitle: "Transmisión HD 24/7 con la mejor programación y artistas internacionales.",
@@ -829,18 +853,88 @@
         const audioEl = document.getElementById('radio-audio');
         let isPlaying = false;
 
+        // FUNCIÓN DE NAVEGACIÓN POR PÁGINAS (NO LANDING)
+        function navigateToPage(pageId) {
+            // Asegurar que estemos en la vista pública
+            document.getElementById('view-backoffice').classList.add('hidden');
+            document.getElementById('view-landing').classList.remove('hidden');
+
+            // Ocultar todas las páginas públicas
+            document.querySelectorAll('.public-page').forEach(page => page.classList.add('hidden'));
+
+            // Mostrar la página seleccionada
+            const targetPage = document.getElementById(`page-${pageId}`);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+            }
+
+            // Actualizar estado activo en menú Desktop
+            document.querySelectorAll('.nav-link-desktop').forEach(btn => {
+                btn.classList.remove('text-brand-500');
+                btn.classList.add('text-slate-300');
+            });
+            const activeDesktop = document.getElementById(`nav-desktop-${pageId}`);
+            if (activeDesktop) {
+                activeDesktop.classList.remove('text-slate-300');
+                activeDesktop.classList.add('text-brand-500');
+            }
+
+            // Actualizar estado activo en menú Móvil
+            document.querySelectorAll('.nav-link-mobile').forEach(btn => {
+                btn.classList.remove('bg-brand-600', 'text-white');
+                btn.classList.add('bg-slate-800', 'text-slate-300');
+            });
+            const activeMobile = document.getElementById(`nav-mobile-${pageId}`);
+            if (activeMobile) {
+                activeMobile.classList.remove('bg-slate-800', 'text-slate-300');
+                activeMobile.classList.add('bg-brand-600', 'text-white');
+                activeMobile.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updatePlayerUI(playing) {
+            const btn = document.getElementById('main-player-btn');
+            const icon = document.getElementById('main-player-icon');
+            const label = document.getElementById('main-player-label');
+            const dot = document.getElementById('player-status-dot');
+            const statusText = document.getElementById('player-status-text');
+
+            if (playing) {
+                btn.className = "bg-brand-600 hover:bg-brand-500 active:scale-95 text-white font-black px-5 sm:px-7 py-3 sm:py-3.5 rounded-2xl shadow-lg shadow-brand-600/30 border-2 border-rose-400/50 flex items-center space-x-2.5 transition-all cursor-pointer shrink-0";
+                icon.className = "fa-solid fa-pause text-lg sm:text-xl";
+                label.innerText = "PAUSAR RADIO";
+                dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping";
+                statusText.className = "text-[11px] sm:text-xs font-extrabold uppercase tracking-wider text-emerald-400";
+                statusText.innerText = "SONANDO EN VIVO";
+            } else {
+                btn.className = "bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-black px-5 sm:px-7 py-3 sm:py-3.5 rounded-2xl shadow-lg shadow-emerald-600/30 border-2 border-emerald-400/50 flex items-center space-x-2.5 transition-all cursor-pointer shrink-0";
+                icon.className = "fa-solid fa-play text-lg sm:text-xl";
+                label.innerText = "ESCUCHAR RADIO";
+                dot.className = "w-2.5 h-2.5 rounded-full bg-amber-400";
+                statusText.className = "text-[11px] sm:text-xs font-extrabold uppercase tracking-wider text-amber-400";
+                statusText.innerText = "Listo para escuchar";
+            }
+        }
+
         function togglePlayer() {
             if (isPlaying) {
                 audioEl.pause();
                 isPlaying = false;
-                document.getElementById('main-player-icon').className = "fa-solid fa-play";
-                document.getElementById('header-play-icon').className = "fa-solid fa-play";
+                updatePlayerUI(false);
             } else {
+                const label = document.getElementById('main-player-label');
+                label.innerText = "CONECTANDO...";
                 audioEl.src = state.streaming.audioUrl;
-                audioEl.play().catch(() => alert("No se pudo iniciar el streaming de audio. Verifica la URL de emisión."));
-                isPlaying = true;
-                document.getElementById('main-player-icon').className = "fa-solid fa-pause";
-                document.getElementById('header-play-icon').className = "fa-solid fa-pause";
+                audioEl.play().then(() => {
+                    isPlaying = true;
+                    updatePlayerUI(true);
+                }).catch(() => {
+                    isPlaying = false;
+                    updatePlayerUI(false);
+                    alert("No se pudo iniciar el streaming de audio. Verifica tu conexión o la URL de emisión.");
+                });
             }
         }
 
@@ -877,224 +971,222 @@
         }
 
         // Estado inicial del Bot de WhatsApp
-		let waState = {
-			number: "593991142422",
-			welcome: "¡Hola! 🎙️ ¿En qué podemos ayudarte hoy en Universal FM Loja?",
-			options: ["🎵 Enviar Saludos al Aire", "📻 Programación de Hoy", "📞 Contactar a Cabina"]
-		};
+        let waState = {
+            number: "593991142422",
+            welcome: "¡Hola! 🎙️ ¿En qué podemos ayudarte hoy en Universal FM Loja?",
+            options: ["🎵 Enviar Saludos al Aire", "📻 Programación de Hoy", "📞 Contactar a Cabina"]
+        };
 
-		function toggleWhatsappBot() {
-			const box = document.getElementById('whatsapp-bot-box');
-			box.classList.toggle('hidden');
-			renderWhatsappBotUI();
-		}
+        function toggleWhatsappBot() {
+            const box = document.getElementById('whatsapp-bot-box');
+            box.classList.toggle('hidden');
+            renderWhatsappBotUI();
+        }
 
-		function renderWhatsappBotUI() {
-			const welcomeEl = document.getElementById('bot-welcome-ui');
-			const container = document.getElementById('bot-options-container');
-			
-			if (welcomeEl) welcomeEl.innerText = waState.welcome;
-			
-			if (container) {
-				container.innerHTML = (waState.options || []).map(opt => `
-					<a href="https://wa.me/${waState.number}?text=${encodeURIComponent('Hola, me interesa: ' + opt)}" target="_blank" 
-					   class="block w-full bg-slate-900 hover:bg-emerald-600/30 border border-slate-700 p-2.5 rounded-xl text-slate-200 text-center transition">
-					   ${opt}
-					</a>
-				`).join('');
-			}
-		}
+        function renderWhatsappBotUI() {
+            const welcomeEl = document.getElementById('bot-welcome-ui');
+            const container = document.getElementById('bot-options-container');
+            
+            if (welcomeEl) welcomeEl.innerText = waState.welcome;
+            
+            if (container) {
+                container.innerHTML = (waState.options || []).map(opt => `
+                    <a href="https://wa.me/${waState.number}?text=${encodeURIComponent('Hola, me interesa: ' + opt)}" target="_blank" 
+                       class="block w-full bg-slate-900 hover:bg-emerald-600/30 border border-slate-700 p-2.5 rounded-xl text-slate-200 text-center transition">
+                       ${opt}
+                    </a>
+                `).join('');
+            }
+        }
 
-		async function saveWhatsappConfig(e) {
-			e.preventDefault();
-			const numInput = document.getElementById('wa-number').value.trim();
-			const welcomeInput = document.getElementById('wa-welcome').value.trim();
-			const rawOptions = document.getElementById('wa-options').value;
-			const optionsArray = rawOptions.split('\n').map(item => item.trim()).filter(Boolean);
+        async function saveWhatsappConfig(e) {
+            e.preventDefault();
+            const numInput = document.getElementById('wa-number').value.trim();
+            const welcomeInput = document.getElementById('wa-welcome').value.trim();
+            const rawOptions = document.getElementById('wa-options').value;
+            const optionsArray = rawOptions.split('\n').map(item => item.trim()).filter(Boolean);
 
-			waState = {
-				number: numInput,
-				welcome: welcomeInput,
-				options: optionsArray.length > 0 ? optionsArray : ["🎵 Enviar Saludos al Aire"]
-			};
+            waState = {
+                number: numInput,
+                welcome: welcomeInput,
+                options: optionsArray.length > 0 ? optionsArray : ["🎵 Enviar Saludos al Aire"]
+            };
 
-			try {
-				const { doc, setDoc } = window.firebaseCollections;
-				await setDoc(doc(window.db, "settings", "whatsapp"), waState);
-				renderWhatsappBotUI();
-				alert("¡Configuración del Bot de WhatsApp guardada con éxito en Firebase!");
-			} catch (err) {
-				console.error("Error al guardar WhatsApp:", err);
-				alert("Hubo un error al guardar en Firebase.");
-			}
-		}
-		
-		// Estado inicial de usuarios
-		let usersState = [
-			{ firebaseId: 'default-admin', name: 'Administrador Principal', username: 'admin', pass: 'admin123', role: 'Administrador General' }
-		];
+            try {
+                const { doc, setDoc } = window.firebaseCollections;
+                await setDoc(doc(window.db, "settings", "whatsapp"), waState);
+                renderWhatsappBotUI();
+                alert("¡Configuración del Bot de WhatsApp guardada con éxito en Firebase!");
+            } catch (err) {
+                console.error("Error al guardar WhatsApp:", err);
+                alert("Hubo un error al guardar en Firebase.");
+            }
+        }
+        
+        // Estado inicial de usuarios
+        let usersState = [
+            { firebaseId: 'default-admin', name: 'Administrador Principal', username: 'admin', pass: 'admin123', role: 'Administrador General' }
+        ];
 
-		function handleLoginSubmit(e) {
-			e.preventDefault();
-			const u = document.getElementById('login-user').value.trim();
-			const p = document.getElementById('login-pass').value.trim();
-			const foundUser = usersState.find(user => user.username === u && user.pass === p);
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            const u = document.getElementById('login-user').value.trim();
+            const p = document.getElementById('login-pass').value.trim();
+            const foundUser = usersState.find(user => user.username === u && user.pass === p);
 
-			if (foundUser) {
-				closeLoginModal();
-				switchView('backoffice');
-				alert(`¡Bienvenido al panel, ${foundUser.name}!`);
-			} else {
-				alert('Usuario o contraseña incorrectos.');
-			}
-		}
+            if (foundUser) {
+                closeLoginModal();
+                switchView('backoffice');
+                alert(`¡Bienvenido al panel, ${foundUser.name}!`);
+            } else {
+                alert('Usuario o contraseña incorrectos.');
+            }
+        }
 
-		function openUserModal(id = null) {
-			document.getElementById('user-modal').classList.remove('hidden');
-			if (id) {
-				const usr = usersState.find(u => u.firebaseId === id);
-				document.getElementById('user-modal-title').innerText = "Editar Usuario";
-				document.getElementById('user-edit-id').value = id;
-				document.getElementById('usr-name').value = usr.name;
-				document.getElementById('usr-username').value = usr.username;
-				document.getElementById('usr-pass').value = usr.pass;
-				document.getElementById('usr-role').value = usr.role;
-			} else {
-				document.getElementById('user-modal-title').innerText = "Nuevo Usuario Administrador";
-				document.getElementById('user-edit-id').value = "";
-				document.getElementById('usr-name').value = "";
-				document.getElementById('usr-username').value = "";
-				document.getElementById('usr-pass').value = "";
-				document.getElementById('usr-role').value = "Administrador General";
-			}
-		}
+        function openUserModal(id = null) {
+            document.getElementById('user-modal').classList.remove('hidden');
+            if (id) {
+                const usr = usersState.find(u => u.firebaseId === id);
+                document.getElementById('user-modal-title').innerText = "Editar Usuario";
+                document.getElementById('user-edit-id').value = id;
+                document.getElementById('usr-name').value = usr.name;
+                document.getElementById('usr-username').value = usr.username;
+                document.getElementById('usr-pass').value = usr.pass;
+                document.getElementById('usr-role').value = usr.role;
+            } else {
+                document.getElementById('user-modal-title').innerText = "Nuevo Usuario Administrador";
+                document.getElementById('user-edit-id').value = "";
+                document.getElementById('usr-name').value = "";
+                document.getElementById('usr-username').value = "";
+                document.getElementById('usr-pass').value = "";
+                document.getElementById('usr-role').value = "Administrador General";
+            }
+        }
 
-		function closeUserModal() {
-			document.getElementById('user-modal').classList.add('hidden');
-		}
+        function closeUserModal() {
+            document.getElementById('user-modal').classList.add('hidden');
+        }
 
-		async function saveUserSubmit(e) {
-			e.preventDefault();
-			const editId = document.getElementById('user-edit-id').value;
-			const userData = {
-				name: document.getElementById('usr-name').value,
-				username: document.getElementById('usr-username').value,
-				pass: document.getElementById('usr-pass').value,
-				role: document.getElementById('usr-role').value
-			};
+        async function saveUserSubmit(e) {
+            e.preventDefault();
+            const editId = document.getElementById('user-edit-id').value;
+            const userData = {
+                name: document.getElementById('usr-name').value,
+                username: document.getElementById('usr-username').value,
+                pass: document.getElementById('usr-pass').value,
+                role: document.getElementById('usr-role').value
+            };
 
-			const { collection, addDoc, doc, updateDoc } = window.firebaseCollections;
+            const { collection, addDoc, doc, updateDoc } = window.firebaseCollections;
 
-			try {
-				if (editId && editId !== 'default-admin') {
-					await updateDoc(doc(window.db, "users", editId), userData);
-					const idx = usersState.findIndex(u => u.firebaseId === editId);
-					usersState[idx] = { firebaseId: editId, ...userData };
-				} else {
-					const ref = await addDoc(collection(window.db, "users"), userData);
-					usersState.push({ firebaseId: ref.id, ...userData });
-				}
+            try {
+                if (editId && editId !== 'default-admin') {
+                    await updateDoc(doc(window.db, "users", editId), userData);
+                    const idx = usersState.findIndex(u => u.firebaseId === editId);
+                    usersState[idx] = { firebaseId: editId, ...userData };
+                } else {
+                    const ref = await addDoc(collection(window.db, "users"), userData);
+                    usersState.push({ firebaseId: ref.id, ...userData });
+                }
 
-				closeUserModal();
-				renderAdminUsers();
-				alert("¡Usuario guardado correctamente en Firebase!");
-			} catch (err) {
-				console.error(err);
-				alert("Error al guardar el usuario.");
-			}
-		}
+                closeUserModal();
+                renderAdminUsers();
+                alert("¡Usuario guardado correctamente en Firebase!");
+            } catch (err) {
+                console.error(err);
+                alert("Error al guardar el usuario.");
+            }
+        }
 
-		async function deleteUser(id) {
-			if (id === 'default-admin') {
-				alert("No se puede eliminar al administrador principal del sistema.");
-				return;
-			}
-			if (!confirm("¿Estás seguro de revocar el acceso a este usuario?")) return;
+        async function deleteUser(id) {
+            if (id === 'default-admin') {
+                alert("No se puede eliminar al administrador principal del sistema.");
+                return;
+            }
+            if (!confirm("¿Estás seguro de revocar el acceso a este usuario?")) return;
 
-			try {
-				const { doc, deleteDoc } = window.firebaseCollections;
-				await deleteDoc(doc(window.db, "users", id));
-				usersState = usersState.filter(u => u.firebaseId !== id);
-				renderAdminUsers();
-				alert("Usuario eliminado con éxito.");
-			} catch (err) {
-				console.error(err);
-			}
-		}
+            try {
+                const { doc, deleteDoc } = window.firebaseCollections;
+                await deleteDoc(doc(window.db, "users", id));
+                usersState = usersState.filter(u => u.firebaseId !== id);
+                renderAdminUsers();
+                alert("Usuario eliminado con éxito.");
+            } catch (err) {
+                console.error(err);
+            }
+        }
 
         // ================= GESTIÓN DE MODALES PROGRAMAS Y GALERÍA =================
-		function openProgramModal(id = null) {
-			document.getElementById('program-modal').classList.remove('hidden');
-			// Limpiar campo de archivo al abrir
-			const fileInput = document.getElementById('prog-file');
-			if(fileInput) fileInput.value = "";
+        function openProgramModal(id = null) {
+            document.getElementById('program-modal').classList.remove('hidden');
+            const fileInput = document.getElementById('prog-file');
+            if(fileInput) fileInput.value = "";
 
-			if (id) {
-				const prog = state.programs.find(p => String(p.firebaseId) === String(id));
-				if (prog) {
-					document.getElementById('program-modal-title').innerText = "Editar Programa";
-					document.getElementById('prog-edit-id').value = id;
-					document.getElementById('prog-name').value = prog.name || '';
-					document.getElementById('prog-time').value = prog.time_slot || '';
-					document.getElementById('prog-host').value = prog.host_name || '';
-					document.getElementById('prog-desc').value = prog.description || '';
-					document.getElementById('prog-img').value = prog.img || '';
-				}
-			} else {
-				document.getElementById('program-modal-title').innerText = "Añadir Programa";
-				document.getElementById('prog-edit-id').value = "";
-				document.getElementById('prog-name').value = "";
-				document.getElementById('prog-time').value = "";
-				document.getElementById('prog-host').value = "";
-				document.getElementById('prog-desc').value = "";
-				document.getElementById('prog-img').value = "";
-			}
-		}
+            if (id) {
+                const prog = state.programs.find(p => String(p.firebaseId) === String(id));
+                if (prog) {
+                    document.getElementById('program-modal-title').innerText = "Editar Programa";
+                    document.getElementById('prog-edit-id').value = id;
+                    document.getElementById('prog-name').value = prog.name || '';
+                    document.getElementById('prog-time').value = prog.time_slot || '';
+                    document.getElementById('prog-host').value = prog.host_name || '';
+                    document.getElementById('prog-desc').value = prog.description || '';
+                    document.getElementById('prog-img').value = prog.img || '';
+                }
+            } else {
+                document.getElementById('program-modal-title').innerText = "Añadir Programa";
+                document.getElementById('prog-edit-id').value = "";
+                document.getElementById('prog-name').value = "";
+                document.getElementById('prog-time').value = "";
+                document.getElementById('prog-host').value = "";
+                document.getElementById('prog-desc').value = "";
+                document.getElementById('prog-img').value = "";
+            }
+        }
         function closeProgramModal() { document.getElementById('program-modal').classList.add('hidden'); }
 
-		async function saveProgramSubmit(e) {
-			e.preventDefault();
-			const editId = document.getElementById('prog-edit-id').value;
-			const fileInput = document.getElementById('prog-file');
-			let imageUrl = document.getElementById('prog-img').value;
+        async function saveProgramSubmit(e) {
+            e.preventDefault();
+            const editId = document.getElementById('prog-edit-id').value;
+            const fileInput = document.getElementById('prog-file');
+            let imageUrl = document.getElementById('prog-img').value;
 
-			// Si el usuario seleccionó un archivo desde su escritorio, conviértelo a Base64
-			if (fileInput.files && fileInput.files[0]) {
-				imageUrl = await convertFileToBase64(fileInput.files[0]);
-			}
+            if (fileInput.files && fileInput.files[0]) {
+                imageUrl = await convertFileToBase64(fileInput.files[0]);
+            }
 
-			const data = {
-				name: document.getElementById('prog-name').value,
-				time_slot: document.getElementById('prog-time').value,
-				host_name: document.getElementById('prog-host').value,
-				description: document.getElementById('prog-desc').value,
-				img: imageUrl // Se guarda la imagen local procesada o la URL ingresada
-			};
+            const data = {
+                name: document.getElementById('prog-name').value,
+                time_slot: document.getElementById('prog-time').value,
+                host_name: document.getElementById('prog-host').value,
+                description: document.getElementById('prog-desc').value,
+                img: imageUrl
+            };
 
-			if (window.firebaseCollections && window.db) {
-				try {
-					const { collection, addDoc, doc, updateDoc } = window.firebaseCollections;
+            if (window.firebaseCollections && window.db) {
+                try {
+                    const { collection, addDoc, doc, updateDoc } = window.firebaseCollections;
 
-					if (editId) {
-						await updateDoc(doc(window.db, "programs", editId), data);
-						const idx = state.programs.findIndex(p => String(p.firebaseId) === String(editId));
-						if (idx !== -1) {
-							state.programs[idx] = { firebaseId: editId, ...data };
-						}
-					} else {
-						const ref = await addDoc(collection(window.db, "programs"), data);
-						state.programs.push({ firebaseId: ref.id, ...data });
-					}
-				} catch (err) {
-					console.error("Error al guardar en Firebase:", err);
-				}
-			}
+                    if (editId) {
+                        await updateDoc(doc(window.db, "programs", editId), data);
+                        const idx = state.programs.findIndex(p => String(p.firebaseId) === String(editId));
+                        if (idx !== -1) {
+                            state.programs[idx] = { firebaseId: editId, ...data };
+                        }
+                    } else {
+                        const ref = await addDoc(collection(window.db, "programs"), data);
+                        state.programs.push({ firebaseId: ref.id, ...data });
+                    }
+                } catch (err) {
+                    console.error("Error al guardar en Firebase:", err);
+                }
+            }
 
-			closeProgramModal();
-			renderAdminAll();
-			renderPublicAll();
-			alert("¡Programa guardado con éxito!");
-		}
+            closeProgramModal();
+            renderAdminAll();
+            renderPublicAll();
+            alert("¡Programa guardado con éxito!");
+        }
 
         async function deleteProgram(id) {
             if (!confirm("¿Deseas eliminar este programa de la grilla?")) return;
@@ -1163,176 +1255,170 @@
             renderPublicAll();
         }
 
-		// ================= MODALES Y CRUD ANUNCIOS & CLASIFICADOS =================
-		function openClassifiedModal(id = null) {
-			document.getElementById('classified-modal').classList.remove('hidden');
-			
-			// Limpiar el selector de archivo local al abrir el modal
-			const fileInput = document.getElementById('class-file');
-			if (fileInput) fileInput.value = "";
+        // ================= MODALES Y CRUD ANUNCIOS & CLASIFICADOS =================
+        function openClassifiedModal(id = null) {
+            document.getElementById('classified-modal').classList.remove('hidden');
+            const fileInput = document.getElementById('class-file');
+            if (fileInput) fileInput.value = "";
 
-			if (id) {
-				const item = state.classifieds.find(c => String(c.firebaseId) === String(id));
-				if (item) {
-					document.getElementById('classified-modal-title').innerText = "Editar Anuncio";
-					document.getElementById('class-edit-id').value = id;
-					document.getElementById('class-title').value = item.title || '';
-					document.getElementById('class-type').value = item.type || 'Gratis / Comunidad';
-					document.getElementById('class-contact').value = item.contact || '';
-					document.getElementById('class-desc').value = item.description || '';
-					document.getElementById('class-img').value = item.img || '';
-				}
-			} else {
-				document.getElementById('classified-modal-title').innerText = "Nuevo Anuncio";
-				document.getElementById('class-edit-id').value = "";
-				document.getElementById('class-title').value = "";
-				document.getElementById('class-type').value = "Gratis / Comunidad";
-				document.getElementById('class-contact').value = "";
-				document.getElementById('class-desc').value = "";
-				document.getElementById('class-img').value = "";
-			}
-		}
+            if (id) {
+                const item = state.classifieds.find(c => String(c.firebaseId) === String(id));
+                if (item) {
+                    document.getElementById('classified-modal-title').innerText = "Editar Anuncio";
+                    document.getElementById('class-edit-id').value = id;
+                    document.getElementById('class-title').value = item.title || '';
+                    document.getElementById('class-type').value = item.type || 'Gratis / Comunidad';
+                    document.getElementById('class-contact').value = item.contact || '';
+                    document.getElementById('class-desc').value = item.description || '';
+                    document.getElementById('class-img').value = item.img || '';
+                }
+            } else {
+                document.getElementById('classified-modal-title').innerText = "Nuevo Anuncio";
+                document.getElementById('class-edit-id').value = "";
+                document.getElementById('class-title').value = "";
+                document.getElementById('class-type').value = "Gratis / Comunidad";
+                document.getElementById('class-contact').value = "";
+                document.getElementById('class-desc').value = "";
+                document.getElementById('class-img').value = "";
+            }
+        }
 
-		function closeClassifiedModal() {
-			document.getElementById('classified-modal').classList.add('hidden');
-		}
+        function closeClassifiedModal() {
+            document.getElementById('classified-modal').classList.add('hidden');
+        }
 
-		async function saveClassifiedSubmit(e) {
-			e.preventDefault();
-			const editId = document.getElementById('class-edit-id').value;
-			const fileInput = document.getElementById('class-file');
-			let imageUrl = document.getElementById('class-img').value;
+        async function saveClassifiedSubmit(e) {
+            e.preventDefault();
+            const editId = document.getElementById('class-edit-id').value;
+            const fileInput = document.getElementById('class-file');
+            let imageUrl = document.getElementById('class-img').value;
 
-			// Convertir a Base64 si el usuario seleccionó un archivo local
-			if (fileInput.files && fileInput.files[0]) {
-				imageUrl = await convertFileToBase64(fileInput.files[0]);
-			}
+            if (fileInput.files && fileInput.files[0]) {
+                imageUrl = await convertFileToBase64(fileInput.files[0]);
+            }
 
-			const data = {
-				title: document.getElementById('class-title').value,
-				type: document.getElementById('class-type').value,
-				contact: document.getElementById('class-contact').value,
-				description: document.getElementById('class-desc').value,
-				img: imageUrl
-			};
+            const data = {
+                title: document.getElementById('class-title').value,
+                type: document.getElementById('class-type').value,
+                contact: document.getElementById('class-contact').value,
+                description: document.getElementById('class-desc').value,
+                img: imageUrl
+            };
 
-			if (window.firebaseCollections && window.db) {
-				try {
-					const { collection, addDoc, doc, updateDoc } = window.firebaseCollections;
+            if (window.firebaseCollections && window.db) {
+                try {
+                    const { collection, addDoc, doc, updateDoc } = window.firebaseCollections;
 
-					if (editId) {
-						await updateDoc(doc(window.db, "classifieds", editId), data);
-						const idx = state.classifieds.findIndex(c => String(c.firebaseId) === String(editId));
-						if (idx !== -1) {
-							state.classifieds[idx] = { firebaseId: editId, ...data };
-						}
-					} else {
-						const ref = await addDoc(collection(window.db, "classifieds"), data);
-						state.classifieds.push({ firebaseId: ref.id, ...data });
-					}
-				} catch (err) {
-					console.error("Error al guardar en Firebase:", err);
-				}
-			}
+                    if (editId) {
+                        await updateDoc(doc(window.db, "classifieds", editId), data);
+                        const idx = state.classifieds.findIndex(c => String(c.firebaseId) === String(editId));
+                        if (idx !== -1) {
+                            state.classifieds[idx] = { firebaseId: editId, ...data };
+                        }
+                    } else {
+                        const ref = await addDoc(collection(window.db, "classifieds"), data);
+                        state.classifieds.push({ firebaseId: ref.id, ...data });
+                    }
+                } catch (err) {
+                    console.error("Error al guardar en Firebase:", err);
+                }
+            }
 
-			closeClassifiedModal();
-			renderAdminAll();
-			renderPublicAll();
-			alert("Anuncio guardado con éxito.");
-		}
+            closeClassifiedModal();
+            renderAdminAll();
+            renderPublicAll();
+            alert("Anuncio guardado con éxito.");
+        }
 
-		async function deleteClassified(id) {
-			if (!confirm("¿Deseas eliminar este anuncio clasificado?")) return;
-			const { doc, deleteDoc } = window.firebaseCollections;
-			await deleteDoc(doc(window.db, "classifieds", id));
-			state.classifieds = state.classifieds.filter(c => c.firebaseId !== id);
-			renderAdminAll();
-			renderPublicAll();
-		}
+        async function deleteClassified(id) {
+            if (!confirm("¿Deseas eliminar este anuncio clasificado?")) return;
+            const { doc, deleteDoc } = window.firebaseCollections;
+            await deleteDoc(doc(window.db, "classifieds", id));
+            state.classifieds = state.classifieds.filter(c => c.firebaseId !== id);
+            renderAdminAll();
+            renderPublicAll();
+        }
 
-		// ================= MODALES Y CRUD SALÓN DE LA FAMA =================
-		function openHallOfFameModal(id = null) {
-			document.getElementById('halloffame-modal').classList.remove('hidden');
-			
-			// Limpiar el selector de archivos al abrir el modal
-			const fileInput = document.getElementById('hof-file');
-			if (fileInput) fileInput.value = "";
+        // ================= MODALES Y CRUD SALÓN DE LA FAMA =================
+        function openHallOfFameModal(id = null) {
+            document.getElementById('halloffame-modal').classList.remove('hidden');
+            const fileInput = document.getElementById('hof-file');
+            if (fileInput) fileInput.value = "";
 
-			if (id) {
-				const item = state.halloffame.find(h => String(h.firebaseId) === String(id));
-				if (item) {
-					document.getElementById('halloffame-modal-title').innerText = "Editar Artista";
-					document.getElementById('hof-edit-id').value = id;
-					document.getElementById('hof-name').value = item.name || '';
-					document.getElementById('hof-role').value = item.role_title || '';
-					document.getElementById('hof-bio').value = item.bio || '';
-					document.getElementById('hof-img').value = item.img || '';
-				}
-			} else {
-				document.getElementById('halloffame-modal-title').innerText = "Añadir Leyenda / Artista";
-				document.getElementById('hof-edit-id').value = "";
-				document.getElementById('hof-name').value = "";
-				document.getElementById('hof-role').value = "";
-				document.getElementById('hof-bio').value = "";
-				document.getElementById('hof-img').value = "";
-			}
-		}
+            if (id) {
+                const item = state.halloffame.find(h => String(h.firebaseId) === String(id));
+                if (item) {
+                    document.getElementById('halloffame-modal-title').innerText = "Editar Artista";
+                    document.getElementById('hof-edit-id').value = id;
+                    document.getElementById('hof-name').value = item.name || '';
+                    document.getElementById('hof-role').value = item.role_title || '';
+                    document.getElementById('hof-bio').value = item.bio || '';
+                    document.getElementById('hof-img').value = item.img || '';
+                }
+            } else {
+                document.getElementById('halloffame-modal-title').innerText = "Añadir Leyenda / Artista";
+                document.getElementById('hof-edit-id').value = "";
+                document.getElementById('hof-name').value = "";
+                document.getElementById('hof-role').value = "";
+                document.getElementById('hof-bio').value = "";
+                document.getElementById('hof-img').value = "";
+            }
+        }
 
-		function closeHallOfFameModal() {
-			document.getElementById('halloffame-modal').classList.add('hidden');
-		}
+        function closeHallOfFameModal() {
+            document.getElementById('halloffame-modal').classList.add('hidden');
+        }
 
-		async function saveHallOfFameSubmit(e) {
-			e.preventDefault();
-			const editId = document.getElementById('hof-edit-id').value;
-			const fileInput = document.getElementById('hof-file');
-			let imageUrl = document.getElementById('hof-img').value;
+        async function saveHallOfFameSubmit(e) {
+            e.preventDefault();
+            const editId = document.getElementById('hof-edit-id').value;
+            const fileInput = document.getElementById('hof-file');
+            let imageUrl = document.getElementById('hof-img').value;
 
-			// Si el usuario selecciona una imagen local desde el escritorio, la convertimos a Base64
-			if (fileInput.files && fileInput.files[0]) {
-				imageUrl = await convertFileToBase64(fileInput.files[0]);
-			}
+            if (fileInput.files && fileInput.files[0]) {
+                imageUrl = await convertFileToBase64(fileInput.files[0]);
+            }
 
-			const data = {
-				name: document.getElementById('hof-name').value,
-				role_title: document.getElementById('hof-role').value,
-				bio: document.getElementById('hof-bio').value,
-				img: imageUrl
-			};
+            const data = {
+                name: document.getElementById('hof-name').value,
+                role_title: document.getElementById('hof-role').value,
+                bio: document.getElementById('hof-bio').value,
+                img: imageUrl
+            };
 
-			if (window.firebaseCollections && window.db) {
-				try {
-					const { collection, addDoc, doc, updateDoc } = window.firebaseCollections;
+            if (window.firebaseCollections && window.db) {
+                try {
+                    const { collection, addDoc, doc, updateDoc } = window.firebaseCollections;
 
-					if (editId) {
-						await updateDoc(doc(window.db, "halloffame", editId), data);
-						const idx = state.halloffame.findIndex(h => String(h.firebaseId) === String(editId));
-						if (idx !== -1) {
-							state.halloffame[idx] = { firebaseId: editId, ...data };
-						}
-					} else {
-						const ref = await addDoc(collection(window.db, "halloffame"), data);
-						state.halloffame.push({ firebaseId: ref.id, ...data });
-					}
-				} catch (err) {
-					console.error("Error al guardar en Firebase:", err);
-				}
-			}
+                    if (editId) {
+                        await updateDoc(doc(window.db, "halloffame", editId), data);
+                        const idx = state.halloffame.findIndex(h => String(h.firebaseId) === String(editId));
+                        if (idx !== -1) {
+                            state.halloffame[idx] = { firebaseId: editId, ...data };
+                        }
+                    } else {
+                        const ref = await addDoc(collection(window.db, "halloffame"), data);
+                        state.halloffame.push({ firebaseId: ref.id, ...data });
+                    }
+                } catch (err) {
+                    console.error("Error al guardar en Firebase:", err);
+                }
+            }
 
-			closeHallOfFameModal();
-			renderAdminAll();
-			renderPublicAll();
-			alert("Artista guardado con éxito.");
-		}
+            closeHallOfFameModal();
+            renderAdminAll();
+            renderPublicAll();
+            alert("Artista guardado con éxito.");
+        }
 
-		async function deleteHallOfFame(id) {
-			if (!confirm("¿Deseas eliminar este artista del Salón de la Fama?")) return;
-			const { doc, deleteDoc } = window.firebaseCollections;
-			await deleteDoc(doc(window.db, "halloffame", id));
-			state.halloffame = state.halloffame.filter(h => h.firebaseId !== id);
-			renderAdminAll();
-			renderPublicAll();
-		}
+        async function deleteHallOfFame(id) {
+            if (!confirm("¿Deseas eliminar este artista del Salón de la Fama?")) return;
+            const { doc, deleteDoc } = window.firebaseCollections;
+            await deleteDoc(doc(window.db, "halloffame", id));
+            state.halloffame = state.halloffame.filter(h => h.firebaseId !== id);
+            renderAdminAll();
+            renderPublicAll();
+        }
 
         // ================= STREAMING & SALUDOS =================
         async function saveStreamingConfig(e) {
@@ -1410,15 +1496,12 @@
             document.getElementById('hero-title').innerText = state.heroTitle;
             document.getElementById('hero-subtitle').innerText = state.heroSubtitle;
 
-            // Marquee Saludos
             document.getElementById('marquee-text').innerText = state.streaming.marqueeText;
 
-            // Stream Video
             if (state.streaming.videoUrl) {
                 document.getElementById('video-stream-iframe').src = state.streaming.videoUrl;
             }
 
-            // Render Programas
             const progContainer = document.getElementById('programs-grid');
             if (progContainer) {
                 progContainer.innerHTML = state.programs.map(p => `
@@ -1438,7 +1521,6 @@
                 `).join('');
             }
 
-            // Render Anuncios & Clasificados
             const classContainer = document.getElementById('classifieds-grid');
             if (classContainer) {
                 classContainer.innerHTML = state.classifieds.map(c => `
@@ -1458,7 +1540,6 @@
                 `).join('');
             }
 
-            // Render Salón de la Fama
             const hofContainer = document.getElementById('halloffame-grid');
             if (hofContainer) {
                 hofContainer.innerHTML = state.halloffame.map(h => `
@@ -1475,7 +1556,6 @@
                 `).join('');
             }
 
-            // Render Galería
             const galContainer = document.getElementById('gallery-grid');
             if (galContainer) {
                 galContainer.innerHTML = state.gallery.map(g => `
@@ -1560,7 +1640,6 @@
                 `).join('');
             }
 
-            // Llenar campos de configuración
             document.getElementById('stream-url-input').value = state.streaming.audioUrl || "";
             document.getElementById('stream-video-input').value = state.streaming.videoUrl || "";
             document.getElementById('stream-marquee-input').value = state.streaming.marqueeText || "";
@@ -1701,7 +1780,7 @@
                         document.getElementById('wa-options').value = (waState.options || []).join('\n');
                     }
                 }
-				
+                
                 const usersSnap = await getDocs(collection(window.db, "users"));
                 if (!usersSnap.empty) {
                     const firebaseUsers = usersSnap.docs.map(d => ({ firebaseId: d.id, ...d.data() }));
@@ -1716,28 +1795,31 @@
                 console.error("Error al conectar con Firebase:", err);
             }
         }
-		
-		function renderAdminUsers() {
-			const container = document.getElementById('admin-users-list');
-			if (container) {
-				container.innerHTML = usersState.map(u => `
-					<div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
-						<div>
-							<span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-brand-500/20 text-brand-400">${u.role}</span>
-							<h4 class="font-bold text-white text-base mt-2">${u.name}</h4>
-							<p class="text-xs text-slate-400 mt-1">Usuario: <span class="text-slate-200 font-mono">${u.username}</span></p>
-						</div>
-						<div class="flex justify-end space-x-3 mt-4 pt-3 border-t border-slate-800">
-							<button onclick="openUserModal('${u.firebaseId}')" class="text-amber-400 hover:text-amber-300 text-xs cursor-pointer font-bold flex items-center gap-1"><i class="fa-solid fa-pen"></i> Editar</button>
-							${u.firebaseId !== 'default-admin' ? `<button onclick="deleteUser('${u.firebaseId}')" class="text-red-400 hover:text-red-300 text-xs cursor-pointer font-bold flex items-center gap-1"><i class="fa-solid fa-trash"></i> Eliminar</button>` : ''}
-						</div>
-					</div>
-				`).join('');
-			}
-		}
+        
+        function renderAdminUsers() {
+            const container = document.getElementById('admin-users-list');
+            if (container) {
+                container.innerHTML = usersState.map(u => `
+                    <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-brand-500/20 text-brand-400">${u.role}</span>
+                            <h4 class="font-bold text-white text-base mt-2">${u.name}</h4>
+                            <p class="text-xs text-slate-400 mt-1">Usuario: <span class="text-slate-200 font-mono">${u.username}</span></p>
+                        </div>
+                        <div class="flex justify-end space-x-3 mt-4 pt-3 border-t border-slate-800">
+                            <button onclick="openUserModal('${u.firebaseId}')" class="text-amber-400 hover:text-amber-300 text-xs cursor-pointer font-bold flex items-center gap-1"><i class="fa-solid fa-pen"></i> Editar</button>
+                            ${u.firebaseId !== 'default-admin' ? `<button onclick="deleteUser('${u.firebaseId}')" class="text-red-400 hover:text-red-300 text-xs cursor-pointer font-bold flex items-center gap-1"><i class="fa-solid fa-trash"></i> Eliminar</button>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Render inicial inmediato antes de esperar Firebase
+        renderPublicAll();
     </script>
 
-    <!-- FIREBASE MODULE SDK CON TUS CREDENCIALES EXACTAS -->
+    <!-- FIREBASE MODULE SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -1761,126 +1843,123 @@
         cargarDatosDesdeFirebase();
         console.log("¡Universal FM conectado correctamente con Firebase!");
 
-		// Intento de auto-reproducción al primer toque del usuario en la pantalla
-        document.addEventListener('click', function initAudioOnTouch() {
+        // Auto-reproducción al primer toque del usuario si aún no está sonando
+        document.addEventListener('click', function initAudioOnTouch(e) {
+            if (e.target.closest('#main-player-btn')) return;
             if (!isPlaying) {
                 audioEl.src = state.streaming.audioUrl;
                 audioEl.play().then(() => {
                     isPlaying = true;
-                    document.getElementById('main-player-icon').className = "fa-solid fa-pause";
-                    // Remover el evento para que solo pase una vez al ingresar
-                    document.removeEventListener('click', initAudioOnTouch);
-                }).catch(e => console.log("Esperando interacción del usuario para reproducir audio."));
+                    updatePlayerUI(true);
+                }).catch(() => {});
             }
         }, { once: true });
-		
     </script>
 
-	<!-- BOTÓN FLOTANTE DE WHATSAPP CON OPCIONES TIPO BOT -->
-	<div class="fixed bottom-24 right-6 z-50">
-		<div id="whatsapp-bot-box" class="hidden mb-3 w-72 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden text-white transition-all transform origin-bottom-right">
-			<div class="bg-emerald-600 p-4 flex justify-between items-center">
-				<div class="flex items-center space-x-2">
-					<div class="w-3 h-3 rounded-full bg-white animate-pulse"></div>
-					<span id="bot-title-ui" class="font-bold text-sm">Asistente Universal FM</span>
-				</div>
-				<button onclick="toggleWhatsappBot()" class="text-white hover:text-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
-			</div>
-			<div class="p-4 space-y-3 text-xs">
-				<p id="bot-welcome-ui" class="text-slate-300 bg-slate-950 p-3 rounded-xl border border-slate-800">¡Hola! 🎙️ ¿En qué podemos ayudarte hoy en Universal FM Loja?</p>
-				<div id="bot-options-container" class="space-y-2"></div>
-			</div>
-		</div>
-
-		<button onclick="toggleWhatsappBot()" class="w-14 h-14 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center text-2xl shadow-lg shadow-emerald-500/40 transition cursor-pointer">
-			<i class="fa-brands fa-whatsapp"></i>
-		</button>
-	</div>
-	
-<!-- FOOTER PROFESIONAL UNIVERSAL FM -->
-<footer class="bg-slate-950 border-t border-slate-800 text-slate-400 pt-12 pb-32 mt-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div class="space-y-4 md:col-span-1">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-rose-400 flex items-center justify-center shadow-lg shadow-brand-500/30 overflow-hidden">
-                        <img src="https://6ab2e7a949b4a3698ffe5252.imgix.net/sandbox/WhatsApp%20Image%202026-09-28%20at%201.49.41%20PM%20(1).jpeg" class="w-full h-full object-cover">
-                    </div>
-                    <span class="text-lg font-extrabold tracking-tight text-white uppercase">UNIVERSAL <span class="text-brand-500">FM LOJA</span></span> 
-					
+    <!-- BOTÓN FLOTANTE DE WHATSAPP CON OPCIONES TIPO BOT -->
+    <div class="fixed bottom-6 right-5 z-50">
+        <div id="whatsapp-bot-box" class="hidden mb-3 w-72 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden text-white transition-all transform origin-bottom-right">
+            <div class="bg-emerald-600 p-4 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <div class="w-3 h-3 rounded-full bg-white animate-pulse"></div>
+                    <span id="bot-title-ui" class="font-bold text-sm">Asistente Universal FM</span>
                 </div>
-				<span class="block text-[11px] text-slate-300 font-medium tracking-wide lowercase">www.universalfmloja.com</span>
-                <p class="text-xs leading-relaxed text-slate-400">
-                    La señal oficial desde Loja, Ecuador para el mundo. Transmitiendo 24/7 con la mejor calidad de audio HD y tecnología en la nube.
-                </p>
-                <div class="flex space-x-3 pt-1">
-                    <a href="https://www.facebook.com/profile.php?id=61556124441797&locale=es_LA" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-brand-600 hover:text-white flex items-center justify-center transition border border-slate-800 text-slate-300"><i class="fa-brands fa-facebook-f text-xs"></i></a>
-                    <a href="https://www.instagram.com/universalfmloja/?hl=es-la" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-brand-600 hover:text-white flex items-center justify-center transition border border-slate-800 text-slate-300"><i class="fa-brands fa-instagram text-xs"></i></a>
-                    <a href="#" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-brand-600 hover:text-white flex items-center justify-center transition border border-slate-800 text-slate-300"><i class="fa-brands fa-youtube text-xs"></i></a>
-                    <a href="https://wa.me/593959432912" target="_blank" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition border border-slate-800 text-slate-300"><i class="fa-brands fa-whatsapp text-xs"></i></a>
-                </div>
+                <button onclick="toggleWhatsappBot()" class="text-white hover:text-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-
-            <div class="space-y-3">
-                <h4 class="text-white font-bold text-xs uppercase tracking-wider">Navegación</h4>
-                <ul class="space-y-2 text-xs">
-                    <li><a href="#tab-home" onclick="switchView('landing')" class="hover:text-brand-400 transition">Inicio / Hero</a></li>
-                    <li><a href="#tab-podcast" onclick="switchView('landing')" class="hover:text-brand-400 transition">Podcast & En Vivo</a></li>
-                    <li><a href="#tab-programs" onclick="switchView('landing')" class="hover:text-brand-400 transition">Grilla de Programación</a></li>
-                    <li><a href="#tab-gallery" onclick="switchView('landing')" class="hover:text-brand-400 transition">Galería Multimedia</a></li>
-                    <li><a href="#tab-contact" onclick="switchView('landing')" class="hover:text-brand-400 transition">Contacto y Cabina</a></li>
-                </ul>
-            </div>
-
-            <div class="space-y-3">
-                <h4 class="text-white font-bold text-xs uppercase tracking-wider">Estudios</h4>
-                <ul class="space-y-2 text-xs text-slate-400">
-                    <li class="flex items-start gap-2">
-                        <i class="fa-solid fa-location-dot text-brand-500 mt-0.5"></i>
-                        <span>Leopoldo Palacios 08-91 y Sabiango ( Plaza de San Sebastián), Loja - Ecuador</span>
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i class="fa-solid fa-phone text-brand-500"></i>
-                        <span>(593) 0959432912</span>
-                    </li>
-					<li class="flex items-center gap-2">
-                        <i class="fa-solid fa-phone text-brand-500"></i>
-                        <span>(593) 07 2627247</span>
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i class="fa-solid fa-envelope text-brand-500"></i>
-                        <span class="truncate">ventas@universalfmloja.com</span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="space-y-3">
-                <h4 class="text-white font-bold text-xs uppercase tracking-wider">Transmisión Cloud</h4>
-                <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-2">
-                    <div class="flex items-center justify-between text-xs">
-                        <span class="text-slate-400">Estado Servidor:</span>
-                        <span class="text-emerald-400 font-bold flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> En Línea</span>
-                    </div>
-                    <div class="flex items-center justify-between text-xs">
-                        <span class="text-slate-400">Base de Datos:</span>
-                        <span class="text-brand-400 font-bold">Firebase Cloud</span>
-                    </div>
-                    <div class="flex items-center justify-between text-xs">
-                        <span class="text-slate-400">Calidad Audio:</span>
-                        <span class="text-white font-bold">HD 320kbps</span>
-                    </div>
-                </div>
+            <div class="p-4 space-y-3 text-xs">
+                <p id="bot-welcome-ui" class="text-slate-300 bg-slate-950 p-3 rounded-xl border border-slate-800">¡Hola! 🎙️ ¿En qué podemos ayudarte hoy en Universal FM Loja?</p>
+                <div id="bot-options-container" class="space-y-2"></div>
             </div>
         </div>
 
-        <div class="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-            <p>© 2026 Universal FM 99.3 Loja. Todos los derechos reservados.</p>
-            <div class="flex items-center space-x-4">
-                <span class="text-slate-400">Desarrollado con Firebase Cloud Backend</span>
-                <button onclick="openLoginModal()" class="text-brand-400 hover:text-brand-300 font-semibold transition cursor-pointer">Acceso Admin</button>
-            </div>
-        </div>
+        <button onclick="toggleWhatsappBot()" class="w-14 h-14 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center text-2xl shadow-lg shadow-emerald-500/40 transition cursor-pointer">
+            <i class="fa-brands fa-whatsapp"></i>
+        </button>
     </div>
-</footer>
+    
+    <!-- FOOTER PROFESIONAL UNIVERSAL FM -->
+    <footer class="bg-slate-950 border-t border-slate-800 text-slate-400 pt-12 pb-16 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="space-y-4 md:col-span-1">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-rose-400 flex items-center justify-center shadow-lg shadow-brand-500/30 overflow-hidden">
+                            <img src="https://6ab2e7a949b4a3698ffe5252.imgix.net/sandbox/WhatsApp%20Image%202026-09-28%20at%201.49.41%20PM%20(1).jpeg" class="w-full h-full object-cover">
+                        </div>
+                        <span class="text-lg font-extrabold tracking-tight text-white uppercase">UNIVERSAL <span class="text-brand-500">FM LOJA</span></span> 
+                    </div>
+                    <span class="block text-[11px] text-slate-300 font-medium tracking-wide lowercase">www.universalfmloja.com</span>
+                    <p class="text-xs leading-relaxed text-slate-400">
+                        La señal oficial desde Loja, Ecuador para el mundo. Transmitiendo 24/7 con la mejor calidad de audio HD y tecnología en la nube.
+                    </p>
+                    <div class="flex space-x-3 pt-1">
+                        <a href="https://www.facebook.com/profile.php?id=61556124441797&locale=es_LA" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-brand-600 hover:text-white flex items-center justify-center transition border border-slate-800 text-slate-300"><i class="fa-brands fa-facebook-f text-xs"></i></a>
+                        <a href="https://www.instagram.com/universalfmloja/?hl=es-la" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-brand-600 hover:text-white flex items-center justify-center transition border border-slate-800 text-slate-300"><i class="fa-brands fa-instagram text-xs"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-brand-600 hover:text-white flex items-center justify-center transition border border-slate-800 text-slate-300"><i class="fa-brands fa-youtube text-xs"></i></a>
+                        <a href="https://wa.me/593959432912" target="_blank" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition border border-slate-800 text-slate-300"><i class="fa-brands fa-whatsapp text-xs"></i></a>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="text-white font-bold text-xs uppercase tracking-wider">Páginas</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><button onclick="navigateToPage('home')" class="hover:text-brand-400 transition cursor-pointer">Inicio</button></li>
+                        <li><button onclick="navigateToPage('podcast')" class="hover:text-brand-400 transition cursor-pointer">Podcast & En Vivo</button></li>
+                        <li><button onclick="navigateToPage('programs')" class="hover:text-brand-400 transition cursor-pointer">Grilla de Programación</button></li>
+                        <li><button onclick="navigateToPage('gallery')" class="hover:text-brand-400 transition cursor-pointer">Galería Multimedia</button></li>
+                        <li><button onclick="navigateToPage('contact')" class="hover:text-brand-400 transition cursor-pointer">Contacto y Cabina</button></li>
+                    </ul>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="text-white font-bold text-xs uppercase tracking-wider">Estudios</h4>
+                    <ul class="space-y-2 text-xs text-slate-400">
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-location-dot text-brand-500 mt-0.5"></i>
+                            <span>Leopoldo Palacios 08-91 y Sabiango (Plaza de San Sebastián), Loja - Ecuador</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-phone text-brand-500"></i>
+                            <span>(593) 0959432912</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-phone text-brand-500"></i>
+                            <span>(593) 07 2627247</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-envelope text-brand-500"></i>
+                            <span class="truncate">ventas@universalfmloja.com</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="text-white font-bold text-xs uppercase tracking-wider">Transmisión Cloud</h4>
+                    <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-2">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-slate-400">Estado Servidor:</span>
+                            <span class="text-emerald-400 font-bold flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> En Línea</span>
+                        </div>
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-slate-400">Base de Datos:</span>
+                            <span class="text-brand-400 font-bold">Firebase Cloud</span>
+                        </div>
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-slate-400">Calidad Audio:</span>
+                            <span class="text-white font-bold">HD 320kbps</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+                <p>© 2026 Universal FM 99.3 Loja. Todos los derechos reservados.</p>
+                <div class="flex items-center space-x-4">
+                    <span class="text-slate-400">Desarrollado con Firebase Cloud Backend</span>
+                    <button onclick="openLoginModal()" class="text-brand-400 hover:text-brand-300 font-semibold transition cursor-pointer">Acceso Admin</button>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
