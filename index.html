@@ -78,11 +78,12 @@
                 <a href="#tab-contact" onclick="switchView('landing')" class="text-slate-300 transition hover:text-brand-500">Contacto</a>
             </nav>
 
-            <div class="flex items-center space-x-3">
-                <button onclick="togglePlayer()" class="bg-brand-600 hover:bg-brand-500 text-white px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 shadow-lg shadow-brand-600/30 transition">
-                    <i id="header-play-icon" class="fa-solid fa-play"></i>
-                    <span class="hidden sm:inline">En Vivo</span>
-                </button>
+			<!-- Cambiar ese botón superior por un enlace directo a la sección de video -->
+			<div class="flex items-center space-x-3">
+			    <a href="#tab-podcast" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-3 py-2.5 rounded-xl border border-slate-700 text-xs transition flex items-center space-x-1.5">
+			        <i class="fa-solid fa-video text-brand-500"></i>
+			        <span class="hidden sm:inline">Cabina TV</span>
+			    </a>
                 <button onclick="openLoginModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white p-2.5 rounded-xl border border-slate-700 text-xs transition flex items-center space-x-1.5 cursor-pointer">
                     <i class="fa-solid fa-gear text-brand-500"></i>
                     <span class="hidden sm:inline">Panel Admin</span>
@@ -792,8 +793,8 @@
     </div>
 
     <!-- AUDIO STREAMING ELEMENT -->
-    <audio id="radio-audio" src="https://stream.zeno.fm/f3wvbb757fhvv" preload="none"></audio>
-
+    <audio id="radio-audio" src="https://stream.zeno.fm/f3wvbb757fhvv" preload="auto" crossorigin="anonymous"></audio>
+	
     <!-- SCRIPT DE LÓGICA Y FIREBASE -->
     <script>
         let state = {
@@ -1759,6 +1760,20 @@
 
         cargarDatosDesdeFirebase();
         console.log("¡Universal FM conectado correctamente con Firebase!");
+
+		// Intento de auto-reproducción al primer toque del usuario en la pantalla
+        document.addEventListener('click', function initAudioOnTouch() {
+            if (!isPlaying) {
+                audioEl.src = state.streaming.audioUrl;
+                audioEl.play().then(() => {
+                    isPlaying = true;
+                    document.getElementById('main-player-icon').className = "fa-solid fa-pause";
+                    // Remover el evento para que solo pase una vez al ingresar
+                    document.removeEventListener('click', initAudioOnTouch);
+                }).catch(e => console.log("Esperando interacción del usuario para reproducir audio."));
+            }
+        }, { once: true });
+		
     </script>
 
 	<!-- BOTÓN FLOTANTE DE WHATSAPP CON OPCIONES TIPO BOT -->
